@@ -1,0 +1,30 @@
+{% comment %}
+  hook: string
+    the hook name without hook_ prefix.
+  params: object
+    the object to pass to the fired hook
+{% endcomment %}
+{% liquid
+  assign results = '[]' | parse_json
+
+  assign hook = '/hook_' | append: hook
+  function implementations = 'modules/core/hook/get_implementations', hook: hook 
+
+  for implementation in implementations
+    function hook_result = implementation.path, params: params
+    if hook_result != nil
+      comment
+        Check if the result is an array and merge the values one by one.
+      endcomment
+      if hook_result[0]
+        for h_result in hook_result
+          assign results = results | add_to_array: h_result
+        endfor
+      else
+        assign results = results | add_to_array: hook_result
+      endif
+    endif
+  endfor
+
+  return results
+%}
