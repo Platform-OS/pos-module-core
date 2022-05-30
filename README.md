@@ -60,29 +60,37 @@ After that, fire `permission` hook will get the following result:
 
 ### Passing params
 
-For example in User module, we created a hook called `user_created`. It seems like that:
+For example in User module, we created a hook called `user_create`. It seems like that:
 
 ```
-assign hook_params = '{}' | parse_json | hash_merge: created_user: user.user, original_params: params
-function results = 'modules/core/hook/fire', hook: 'user_created', params: hook_params
+assign params = '{}' | parse_json | hash_merge: created_user: user.user, hook_params: hook_params
+function results = 'modules/core/hook/fire', hook: 'user_create', params: params
 ```
 
-It means that if you want to do something when a user is created, you only need to create a file (or files in different folders or modules, it's up to you) called `hook_user_created` and in this file you add your functionality.
+It means that if you want to do something when a user is created, you only need to create a file (or files in different folders or modules, it's up to you) called `hook_user_create` and in this file you add your functionality.
 
-For example you can store additional values in your custom profile structure and you will be able to use the created user's ID as a reference. So your `modules/my_custom_profiles/public/views/partials/hook_user_created.liquid` file would seems like this:
+For example you can store additional values in your custom profile structure and you will be able to use the created user's ID as a reference. So your `app/views/partials/lib/hooks/hook_user_create.liquid` file would seems like this:
 
 ```
+{% parse_json args %}
+  {
+    "user_id": {{ params.created_user.id | json }},
+    "first_name": {{ params.hook_params.first_name | json }},
+    "last_name": {{ params.hook_params.last_name | json }},
+    "dog_name": {{ params.hook_params.dog_name | json }},
+    "favorite_color": {{ params.hook_params.favorite_color | json }}
+  }
+{% endparse_json %}
 {% liquid
-  function profile = 'modules/my_custom_profiles/create_profile', user_id: params.created_user.id, dog_name: params.original_params.dog_name, favorite_color: params.original_params.favorite_color
-
-  return nil
+  graphql profile = 'profiles/create', args: args
+  return profile
 %}
 ```
 
-Or another real world example can be to subscribe the user to a newsletter with calling an API of a 3rd party service. In this case your `hook_user_created.liquid` file would seems like this:
+Or another real world example can be to subscribe the user to a newsletter with calling an API of a 3rd party service. In this case your `hook_user_create.liquid` file would seems like this:
 
 ```
-{% if params.original_params.subscribe %}
+{% if params.hook_params.subscribe %}
   {% parse_json data_to_send %}
     {
       "email": {{ params.created_user.email | json }}
