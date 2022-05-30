@@ -1,12 +1,12 @@
-# PlatformOS Hook module
+# PlatformOS Core module
 
-Creates the possibility to make custom hooks and modify the core functionality without changing the the core source.
+Creates the possibility to use SOLID Open/Closed Principle with hook and module system to enable to modify the business logic without changing the core source.
 
 ## Usage
 
 You can create new hooks on your modules or inside you `app` folder, it depends on you.
 
-The only thing what you need to do is call `modules/hook/fire` function with the `hook` name and optionally you can pass `params` attribute. Params will be send to all hook implementations.
+The only thing what you need to do is call `modules/core/hook/fire` function with the `hook` name and optionally you can pass `params` attribute. Params will be send to all hook implementations.
 
 After that, you can create liquid files named with `hook_HOOKNAME.liquid`, and `fire` function will collect all results. It means that these hook implementations have to have `return` tag - it can be `nil` but `return` tag is necessary.
 
@@ -18,7 +18,7 @@ For example we don't need params in [Permission module's](https://github.com/hos
 
 ```
 {% liquid
-  function permissions = 'modules/hook/fire', hook: 'permission'
+  function permissions = 'modules/core/hook/fire', hook: 'permission'
   return permissions
 %}
 ```
@@ -64,7 +64,7 @@ For example in User module, we created a hook called `user_created`. It seems li
 
 ```
 assign hook_params = '{}' | parse_json | hash_merge: created_user: user.user, original_params: params
-function results = 'modules/hook/fire', hook: 'user_created', params: hook_params
+function results = 'modules/core/hook/fire', hook: 'user_created', params: hook_params
 ```
 
 It means that if you want to do something when a user is created, you only need to create a file (or files in different folders or modules, it's up to you) called `hook_user_created` and in this file you add your functionality.

@@ -8,7 +8,7 @@
   assign results = '[]' | parse_json
 
   assign hook = '/hook_' | append: hook
-  function implementations = 'modules/hook/get_implementations', hook: hook 
+  function implementations = 'modules/core/hook/get_implementations', hook: hook 
 
   for implementation in implementations
     function hook_result = implementation.path, params: params
