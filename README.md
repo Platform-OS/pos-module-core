@@ -34,7 +34,7 @@ Permission module implements it's own hook with permission related permission, s
 %}
 ```
 
-User module implements the user related permissions:
+[User module](https://github.com/hosszukalman/pos-module-user) implements the user related permissions:
 
 ```
 {% liquid
