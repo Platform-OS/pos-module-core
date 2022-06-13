@@ -1,7 +1,14 @@
 {% comment %}
   Required params:
     - name string
+    - type string (optional)
+      it can be: array, integer, float, boolean, object
 {% endcomment %}
 {% liquid
-  return context.constants[name]
+  assign result = context.constants[name]
+  case type
+    when 'array'
+      assign result = result | split: ','
+  endcase
+  return result
 %}
