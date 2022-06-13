@@ -1,0 +1,7 @@
+{% comment %}
+  Required params:
+    - name string
+{% endcomment %}
+{% liquid
+  return context.constants[name]
+%}
