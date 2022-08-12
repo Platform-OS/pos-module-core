@@ -7,10 +7,10 @@
     the object that will be passed to the alter hook to give extra information
 {% endcomment %}
 {% liquid
-  assign original_params = params_to_modify | deep_clone 
+  assign original_params = params_to_modify | deep_clone
 
   assign hook = '/hook_' | append: hook | append: '_alter'
-  function implementations = 'modules/core/hook/get_implementations', hook: hook 
+  function implementations = 'modules/core/lib/queries/hook/get_implementations', hook: hook
 
   for implementation in implementations
     function _ = implementation.path, params_to_modify: params_to_modify, params: params
