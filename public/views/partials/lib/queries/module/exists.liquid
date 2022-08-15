@@ -6,9 +6,9 @@
 {% endcomment %}
 {% liquid
   function modules = 'modules/core/lib/queries/registry/get', type: type
-  assign theme_manager = modules | array_detect: machine_name: name
+  assign module = modules | array_detect: machine_name: name
 
-  if theme_manager
+  if module
     return true
   endif
 
