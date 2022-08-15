@@ -14,7 +14,7 @@
   endif
 
   assign hook = '/hook_' | append: hook
-  function implementations = 'modules/core/hook/get_implementations', hook: hook 
+  function implementations = 'modules/core/lib/queries/hook/get_implementations', hook: hook
 
   for implementation in implementations
     function hook_result = implementation.path, params: params
