@@ -1,6 +1,6 @@
 # platformOS Core Module
 
-The goal of this module is to extend the platformOS module system's possibilities.
+The goal of this module is to extend platformOS module system's possiblities.
 
 With the **hook system**, it's possible to use **SOLID's Open/Closed Principle** so you can modify the business logic in other modules in the application folder without changing the source of existing modules.
 
@@ -148,7 +148,7 @@ function res = 'modules/core/lib/commands/variable/set', name: 'VARIABLE_NAME', 
 
 And you can get a variable value with
 ```
-function variable_va; = 'modules/core/lib/queries/variable/get', name: 'VARIABLE_NAME'
+function variable_va = 'modules/core/lib/queries/variable/get', name: 'VARIABLE_NAME'
 ```
 You can pass the `type` argument that can be array, integer, float, boolean, or object.
 
