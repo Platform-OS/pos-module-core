@@ -1,6 +1,6 @@
 # PlatformOS Core module
 
-The golal of this module is to extend platformOS module system's possiblities.
+The goal of this module is to extend platformOS module system's possiblities.
 
 With the **hook system**, it's pssible to use **SOLID's Open/Closed Principle** so you can modify the business logic in other modules on in the application folder, so you don't need to change the existing modules's source.
 
@@ -70,7 +70,7 @@ After that, fire `permission` hook will get the following result:
 
 #### Passing params
 
-For example in User module, we created a hook called `user_create`. It seems like that:
+For example in User module, we created a hook called `user_create`. It looks like that:
 
 ```
 assign params = '{}' | parse_json | hash_merge: created_user: user.user, hook_params: hook_params
@@ -148,13 +148,13 @@ function res = 'modules/core/lib/commands/variable/set', name: 'VARIABLE_NAME', 
 
 And you can get a variable value with
 ```
-function variable_va; = 'modules/core/lib/queries/variable/get', name: 'VARIABLE_NAME'
+function variable_va = 'modules/core/lib/queries/variable/get', name: 'VARIABLE_NAME'
 ```
 You can pass `type` argument that can be array, integer, float, boolean or object.
 
 ## Module registry
 
-You can register your module or theme by implementing `hook_module_info` under `partials/lib/hook/`. An info file should seems likes this:
+You can register your module or theme by implementing `hook_module_info` under `partials/lib/hook/`. An info file should look like this:
 ```
 {% parse_json info %}
 {
