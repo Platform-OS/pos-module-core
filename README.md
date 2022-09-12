@@ -1,6 +1,6 @@
 # platformOS Core Module
 
-The goal of this module is to extend platformOS module system's possiblities.
+The goal of this module is to extend the platformOS module system's possibilities.
 
 With the **hook system**, it's possible to use **SOLID's Open/Closed Principle** so you can modify the business logic in other modules in the application folder without changing the source of existing modules.
 
