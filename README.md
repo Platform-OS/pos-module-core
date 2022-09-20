@@ -177,6 +177,21 @@ function themes = 'modules/core/lib/queries/registry/get, type: 'theme`
 function all = 'modules/core/lib/queries/registry/get
 ```
 
+## HeadScripts hook
+
+The core module provides a hook for other modules to register their head scripts (CSS, JS, metadata, etc).  
+The modules can implement a `hook_headscripts.liquid` file that returns standard HTML, then you can render the aggregated head scripts in you layout using the `headscripts/get` query:
+```
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    {% function headscripts = 'modules/core/lib/queries/headscripts/get' %}
+    {{ headscripts }}
+  </head>
+```
+
+The [Theme manager](https://github.com/Platform-OS/pos-module-theme-manager) module uses the same hook to add theme-specific head scripts from the active theme.
+
 ## Helpers
 You can check if a module or theme is installed to the project:
 ```
