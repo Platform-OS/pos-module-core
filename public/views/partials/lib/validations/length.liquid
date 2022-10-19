@@ -1,0 +1,42 @@
+{% comment %}
+  params: @object
+          @field_name
+          @c
+          @minimum
+          @maximum
+          @is
+          @message_minimum
+          @message_maximum
+          @message_is
+{% endcomment %}
+{% liquid
+  assign value = value | default: object[field_name]
+  assign size = value.size
+
+  if allow_blank == null
+    assign allow_blank = true
+  endif
+  if allow_blank != true
+    if size == blank
+      assign message = message_blank | default: 'core.validation.length.blank' | t
+      function c = 'modules/core/lib/helpers/register_error', contract: c, field_name: field_name, message: message
+    endif
+  endif
+
+  if minimum != null and size < minimum
+    assign message = message_minimum | default: 'core.validation.length.minimum' | t: count: minimum, value: size
+    function c = 'modules/core/lib/helpers/register_error', contract: c, field_name: field_name, message: message
+  endif
+
+  if maximum != null and size > maximum
+    assign message = message_maximum | default: 'core.validation.length.maximum' | t: count: maximum, value: size
+    function c = 'modules/core/lib/helpers/register_error', contract: c, field_name: field_name, message: message
+  endif
+
+  if is != null and size != is
+    assign message = message_is | default: 'core.validation.length.is' | t: count: is, value: size
+    function c = 'modules/core/lib/helpers/register_error', contract: c, field_name: field_name, message: message
+  endif
+
+  return c
+%}

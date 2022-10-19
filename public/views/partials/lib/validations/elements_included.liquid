@@ -1,0 +1,19 @@
+{% comment %}
+  params: @object
+          @field_name
+          @c
+          @array
+          @key[optional]
+{% endcomment %}
+
+{% liquid
+  for val in object[field_name]
+    unless array contains val
+      assign key = key | default: "core.validation.not_included"
+      function c = 'modules/core/lib/helpers/register_error', contract: c, field_name: field_name, key: key
+    endunless
+  endfor
+
+  return c
+%}
+
