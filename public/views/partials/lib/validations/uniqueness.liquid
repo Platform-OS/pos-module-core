@@ -16,7 +16,7 @@
       assign exclude_name = ''
     endif
 
-    graphql r = 'records/count', property_name: field_name, property_value: value, not_id: object_id, table: table, scope_name: scope_name, scope_value: scope_value, exclude_name: exclude_name, exclude_value: exclude_value
+    graphql r = 'modules/core/records/count', property_name: field_name, property_value: value, not_id: object_id, table: table, scope_name: scope_name, scope_value: scope_value, exclude_name: exclude_name, exclude_value: exclude_value
 
     assign count = r.records.total_entries
     if count > 0
