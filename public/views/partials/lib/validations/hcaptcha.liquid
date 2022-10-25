@@ -1,15 +1,14 @@
 {% comment %}
-  params: @params_with_hcaptcha
+  params: @hcaptcha_params
+          @key
           @c
 {% endcomment %}
 
 {% liquid
-  if context.constants.VERIFY_HCAPTCHA == "true" and hcaptcha_params
-    assign hcaptcha_solved =  hcaptcha_params | hcaptcha
-    unless hcaptcha_solved
-      assign key = key | default: "core.validation.hcaptcha"
-      function c = 'modules/core/lib/helpers/register_error', contract: c, field_name: 'hcaptcha', key: key
-    endunless
-  endif
+  assign hcaptcha_solved =  hcaptcha_params | hcaptcha
+  unless hcaptcha_solved
+    assign key = key | default: "core.validation.hcaptcha"
+    function c = 'modules/core/lib/helpers/register_error', contract: c, field_name: 'hcaptcha', key: key
+  endunless
   return c
 %}
