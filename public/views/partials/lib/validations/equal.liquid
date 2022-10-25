@@ -1,0 +1,18 @@
+{% comment %}
+  params: @given
+          @expected
+          @field_name
+          @c
+{% endcomment %}
+{% liquid
+  if given != expected
+
+    if not_verbose
+      assign msg = 'core.validation.equal_not_verbose' | t
+    else
+      assign msg = 'core.validation.equal' | t: given: given, expected: expected
+    endif
+    function c = 'modules/core/lib/helpers/register_error', contract: c, field_name: field_name, message: msg
+  endif
+  return c
+%}
