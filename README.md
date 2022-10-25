@@ -12,7 +12,7 @@ There are **module helper** functions to check if a module or theme exists in th
 
 ## Hooks
 
-You can choose to create new hooks either on your modules or inside your `app` folder.
+You can choose to create new hooks either on your modules or inside your `app` folder. You can organize them into folders, for example, `app/views/partials/hooks/hook_permission.liquid` or  `modules/your-module/public/views/partials/lib/hooks/hook_permission.liquid`.
 
 Call the `modules/core/lib/commands/hook/fire` function with the `hook` name and optionally pass the `params` attribute. Params will be sent to all hook implementations. You can also set the `merge_to_object` boolean if you want to merge the hook results to one object.
 
@@ -145,6 +145,7 @@ You can set a variable with
 ```
 function res = 'modules/core/lib/commands/variable/set', name: 'VARIABLE_NAME', value: 'VARIABLE_VALUE'
 ```
+This function will return the created variable's value.
 
 And you can get a variable value with
 ```
