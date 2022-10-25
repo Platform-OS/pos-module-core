@@ -1,4 +1,5 @@
 {% liquid
+  assign key = key | default: 'core.validation.taken'
   assign value = object[field_name]
   if value != blank
     if object.id != blank
@@ -20,7 +21,7 @@
 
     assign count = r.records.total_entries
     if count > 0
-      function c = 'modules/core/lib/helpers/register_error', contract: c, field_name: field_name, key: 'core.validation.taken'
+      function c = 'modules/core/lib/helpers/register_error', contract: c, field_name: field_name, key: key
     endif
   endif
   return c
