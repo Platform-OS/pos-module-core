@@ -1,6 +1,6 @@
 {
   "name": "pos-module-core",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "Module description",
   "scripts": {
     "version": "(cd ../../ && node /Volumes/Mini1TB/Work/pOS/pos-cli/bin/pos-cli.js modules version core -p) && git add template-values.json && auto-changelog -p && git add CHANGELOG.md"
