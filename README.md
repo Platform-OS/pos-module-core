@@ -203,3 +203,9 @@ function exists = 'modules/core/lib/queries/module/exists', type: 'module'
 The core module provides some basic helpers for data validation.  
 These validators can check if all required fields are provided, check uniqueness, data types (numbers are really a numbers and not letters) etc. Validators always return a hash with two keys - valid being either true or false, and if false - errors with details why the validation has failed.  
 You can find the core validators at `modules/core/public/views/partials/lib/validations`
+
+## Versioning
+
+```
+npm version major | minor | patch
+```
