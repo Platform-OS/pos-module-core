@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Module description",
   "scripts": {
-    "version": "(cd ../../ && pos-cli modules version core -p) && git add template-values.json && auto-changelog -p && git add CHANGELOG.md"
+    "version": "(cd ../../ && node /Volumes/Mini1TB/Work/pOS/pos-cli/bin/pos-cli-modules-version.js core -p) && git add template-values.json && auto-changelog -p && git add CHANGELOG.md"
   },
   "repository": {
     "type": "git",
