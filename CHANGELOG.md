@@ -2,7 +2,18 @@
 
 All notable changes to this project will be documented in this file. Dates are displayed in UTC.
 
+#### [v1.2.0](https://github.com/Platform-OS/pos-module-core/compare/v1.1.0...v1.2.0)
+
+## Breaking changes
+
+## Merged pull requests
+- Version support and add first version [`#12`](https://github.com/Platform-OS/pos-module-core/pull/12)
+
+## Fixes
+
 #### [v1.1.0](https://github.com/Platform-OS/pos-module-core/compare/v1.0.0...v1.1.0)
+
+> 28 October 2022
 
 ## Breaking changes
 
