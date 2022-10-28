@@ -1,0 +1,7 @@
+{
+  "name": "Core",
+  "machine_name": "core",
+  "type": "module",
+  "version": "1.1.0",
+  "dependencies": {}
+}
