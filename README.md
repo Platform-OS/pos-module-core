@@ -270,7 +270,7 @@ This function will return the created variable's value.
 And you can get a variable value with
 
 ```
-function variable_va = 'modules/core/lib/queries/variable/get', name: 'VARIABLE_NAME', default: 'DEFAULT_VALUE'
+function variable_va = 'modules/core/lib/queries/variable/find', name: 'VARIABLE_NAME', default: 'DEFAULT_VALUE'
 ```
 
 You can pass the `type` argument that can be array, integer, float, boolean, or object.
@@ -310,9 +310,9 @@ You can register your module or theme by implementing `hook_module_info` under `
 It is possible to list the registered modules and themes with
 
 ```
-function modules = 'modules/core/lib/queries/registry/get, type: 'module`
-function themes = 'modules/core/lib/queries/registry/get, type: 'theme`
-function all = 'modules/core/lib/queries/registry/get
+function modules = 'modules/core/lib/queries/registry/search, type: 'module`
+function themes = 'modules/core/lib/queries/registry/search, type: 'theme`
+function all = 'modules/core/lib/queries/registry/search
 ```
 
 ## Email sending
@@ -341,13 +341,12 @@ You can pass any additional data as part of the `object` and it'll be available 
 ## Headscripts hook
 
 The core module provides a hook for other modules to register their head scripts (CSS, JS, metadata, etc).  
-The modules can implement a `hook_headscripts.liquid` file that returns standard HTML, then you can render the aggregated head scripts in you layout using the `headscripts/get` query:
-
+The modules can implement a `hook_headscripts.liquid` file that returns standard HTML, then you can render the aggregated head scripts in you layout using the `headscripts/search` query:
 ```
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    {% function headscripts = 'modules/core/lib/queries/headscripts/get' %}
+    {% function headscripts = 'modules/core/lib/queries/headscripts/search' %}
     {{ headscripts }}
   </head>
 ```
