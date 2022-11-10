@@ -207,5 +207,6 @@ You can find the core validators at `modules/core/public/views/partials/lib/vali
 ## Versioning
 
 ```
+git fetch origin --tags
 npm version major | minor | patch
 ```
