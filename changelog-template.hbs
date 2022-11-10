@@ -1,12 +1,12 @@
-### Changelog
+# Changelog
 
 All notable changes to this project will be documented in this file. Dates are displayed in UTC.
 
 {{#each releases}}
   {{#if href}}
-    ###{{#unless major}}#{{/unless}} [{{title}}]({{href}})
+    ## [{{title}}]({{href}})
   {{else}}
-    #### {{title}}
+    ## {{title}}
   {{/if}}
 
   {{#if niceDate}}
@@ -17,7 +17,7 @@ All notable changes to this project will be documented in this file. Dates are d
     {{summary}}
   {{/if}}
 
-  ## Breaking changes
+  ### Breaking changes
   {{#each merges}}
     {{#if commit.breaking}}- {{message}}{{#if href}} [`#{{id}}`]({{href}}){{/if}}{{/if}}
   {{/each}}
@@ -28,12 +28,12 @@ All notable changes to this project will be documented in this file. Dates are d
     {{#if breaking}}- {{subject}}{{#if href}} [`{{shorthash}}`]({{href}}){{/if}}{{/if}}
   {{/each}}
 
-  ## Merged pull requests
+  ### Merged pull requests
   {{#each merges}}
     - {{message}}{{#if href}} [`#{{id}}`]({{href}}){{/if}}
   {{/each}}
 
-  ## Fixes
+  ### Fixes
   {{#each fixes}}
     - {{commit.subject}}{{#each fixes}}{{#if href}} [`#{{id}}`]({{href}}){{/if}}{{/each}}
   {{/each}}
