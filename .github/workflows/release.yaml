@@ -1,0 +1,37 @@
+name: RegisterRelease
+on:
+  push:
+    tags:
+      - '*'
+
+jobs:
+  pre_job:
+    # continue-on-error: true # Uncomment once integration is finished
+    runs-on: ubuntu-latest
+    # Map a step output to a job output
+    outputs:
+      should_skip: ${{ steps.skip_check.outputs.should_skip }}
+    steps:
+      - id: skip_check
+        uses: fkirc/skip-duplicate-actions@master
+        with:
+          github_token: ${{ github.token }}
+          paths_ignore: '["**/README.md"]'
+
+  main:
+    needs: pre_job
+    if: ${{ needs.pre_job.outputs.should_skip != 'true' }}
+    container: platformos/pos-cli:latest
+    runs-on: ubuntu-latest
+    timeout-minutes: 23
+    env:
+      POS_PORTAL_EMAIL: ${{ secrets.POS_PORTAL_EMAIL }}
+      POS_PORTAL_PASSWORD: ${{ secrets.POS_PORTAL_PASSWORD }}
+    steps:
+      - uses: actions/checkout@v2
+      - name: BuildAndUpload
+        shell: sh
+        run: |
+          set -e
+
+          pos-cli modules push --email $POS_PORTAL_EMAIL
