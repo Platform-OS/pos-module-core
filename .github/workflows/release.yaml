@@ -29,7 +29,7 @@ jobs:
       POS_PORTAL_PASSWORD: ${{ secrets.POS_PORTAL_PASSWORD }}
     steps:
       - uses: actions/checkout@v2
-      - name: BuildAndUpload
+      - name: ReleaseNewVersion
         shell: sh
         run: |
           set -e
