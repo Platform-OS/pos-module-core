@@ -49,7 +49,7 @@
     assign gt = gt | to_date
     if date <= gt
       assign localized_date = gt | l
-      assign message = message_gt | defaulte: 'core.validation.date.gt' | t: date: localized_date, value: date
+      assign message = message_gt | default: 'core.validation.date.gt' | t: date: localized_date, value: date
       function c = 'modules/core/lib/helpers/register_error', contract: c, field_name: field_name, message: message
     endif
   endif
@@ -58,7 +58,7 @@
     assign gte = gte | to_date
     if date < gte
       assign localized_date = gte | l
-      assign message = message_gte | defaulte: 'core.validation.date.gte' | t: date: localized_date, value: date
+      assign message = message_gte | default: 'core.validation.date.gte' | t: date: localized_date, value: date
       function c = 'modules/core/lib/helpers/register_error', contract: c, field_name: field_name, message: message
     endif
   endif
