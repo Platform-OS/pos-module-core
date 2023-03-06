@@ -1,11 +1,16 @@
 {% comment %}
   Required params:
     - name string
+    - default any
+      the default vaue of the variable
     - type string (optional)
       it can be: array, integer, float, boolean, object
 {% endcomment %}
 {% liquid
   assign result = context.constants[name]
+  if result == nil
+    return default
+  endif
   case type
     when 'array'
       assign result = result | split: ','
