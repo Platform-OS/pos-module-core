@@ -8,11 +8,11 @@ There is a **variable storage** that can be used to set variables and get their 
 
 You can register your module and theme into the **module registry** with `hook_module_info`. In this info file, you can define your module's name, version, type (module or theme), and dependencies. Module registry will handle **dependency management** and **outdated versions**.
 
-There are **module helper** functions to check if a module or theme exists in the system, so that the other modules can use installed ones without hard dependencies. 
+There are **module helper** functions to check if a module or theme exists in the system, so that the other modules can use installed ones without hard dependencies.
 
 ## Hooks
 
-You can choose to create new hooks either on your modules or inside your `app` folder. You can organize them into folders, for example, `app/views/partials/hooks/hook_permission.liquid` or  `modules/your-module/public/views/partials/lib/hooks/hook_permission.liquid`.
+You can choose to create new hooks either on your modules or inside your `app` folder. You can organize them into folders, for example, `app/views/partials/hooks/hook_permission.liquid` or `modules/your-module/public/views/partials/lib/hooks/hook_permission.liquid`.
 
 Call the `modules/core/lib/commands/hook/fire` function with the `hook` name and optionally pass the `params` attribute. Params will be sent to all hook implementations. You can also set the `merge_to_object` boolean if you want to merge the hook results to one object.
 
@@ -142,20 +142,25 @@ request_headers: '{
 ## Variable storage
 
 You can set a variable with
+
 ```
 function res = 'modules/core/lib/commands/variable/set', name: 'VARIABLE_NAME', value: 'VARIABLE_VALUE'
 ```
+
 This function will return the created variable's value.
 
 And you can get a variable value with
+
 ```
-function variable_va = 'modules/core/lib/queries/variable/get', name: 'VARIABLE_NAME'
+function variable_va = 'modules/core/lib/queries/variable/get', name: 'VARIABLE_NAME', default: 'DEFAULT_VALUE'
 ```
+
 You can pass the `type` argument that can be array, integer, float, boolean, or object.
 
 ## Module registry
 
 You can register your module or theme by implementing `hook_module_info` under `partials/lib/hook/`. An info file should look like this:
+
 ```
 {% parse_json info %}
 {
@@ -171,7 +176,9 @@ You can register your module or theme by implementing `hook_module_info` under `
 
 {% return info %}
 ```
+
 It is possible to list the registered modules and themes with
+
 ```
 function modules = 'modules/core/lib/queries/registry/get, type: 'module`
 function themes = 'modules/core/lib/queries/registry/get, type: 'theme`
@@ -182,6 +189,7 @@ function all = 'modules/core/lib/queries/registry/get
 
 The core module provides a hook for other modules to register their head scripts (CSS, JS, metadata, etc).  
 The modules can implement a `hook_headscripts.liquid` file that returns standard HTML, then you can render the aggregated head scripts in you layout using the `headscripts/get` query:
+
 ```
 <!DOCTYPE html>
 <html lang="en">
@@ -194,12 +202,15 @@ The modules can implement a `hook_headscripts.liquid` file that returns standard
 The [Theme manager](https://github.com/Platform-OS/pos-module-theme-manager) module uses the same hook to add theme-specific head scripts from the active theme.
 
 ## Helpers
+
 You can check if a module or theme is installed to the project:
+
 ```
 function exists = 'modules/core/lib/queries/module/exists', type: 'module'
 ```
 
 ## Validators
+
 The core module provides some basic helpers for data validation.  
 These validators can check if all required fields are provided, check uniqueness, data types (numbers are really a numbers and not letters) etc. Validators always return a hash with two keys - valid being either true or false, and if false - errors with details why the validation has failed.  
 You can find the core validators at `modules/core/public/views/partials/lib/validations`
