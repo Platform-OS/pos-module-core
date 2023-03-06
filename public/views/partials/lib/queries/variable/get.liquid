@@ -8,9 +8,21 @@
 {% endcomment %}
 {% liquid
   assign result = context.constants[name] | default: default, allow_false: true
+
   case type
-    when 'array'
-      assign result = result | split: ','
+  when "boolean"
+    if result == "true"
+      assign result = true
+    else
+      assign result = false
+    endif
+  when "integer"
+    assign result = result | plus: 0
+  when "float"
+    assign result = result | plus: 0
+  when "array"
+    assign result = result | split: ','
   endcase
+
   return result
 %}
