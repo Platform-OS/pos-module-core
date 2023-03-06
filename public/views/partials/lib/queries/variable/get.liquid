@@ -7,10 +7,7 @@
       it can be: array, integer, float, boolean, object
 {% endcomment %}
 {% liquid
-  assign result = context.constants[name]
-  if result == nil
-    return default
-  endif
+  assign result = context.constants[name] | default: default, allow_false: true
   case type
     when 'array'
       assign result = result | split: ','
