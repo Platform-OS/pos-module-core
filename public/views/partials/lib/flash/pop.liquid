@@ -1,0 +1,14 @@
+{% comment %}
+  returns and reset flash messages
+{% endcomment %}
+{% liquid
+  if context.session.sflash != blank
+    assign flash = context.session.sflash | parse_json
+    if context.location.pathname != flash.from or flash.force_clear
+      session sflash = null
+    endif
+
+    return flash
+  endif
+  return null
+%}
