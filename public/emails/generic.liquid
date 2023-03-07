@@ -1,0 +1,7 @@
+---
+from: "{{ data.from }}"
+layout: mailer
+subject: "{{ data.subject }}"
+to: "{{ data.to }}"
+---
+{% include data.partial, data: data %}

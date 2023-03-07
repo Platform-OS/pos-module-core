@@ -1,0 +1,24 @@
+{% liquid
+  unless template
+    if object.partial
+      assign template = 'modules/core/generic'
+    else
+      hash_assign object['valid'] = false
+      hash_assign object['errors'] = 'Missing template or partial in email/send'
+      return object
+    endif
+  endunless
+
+  graphql r = 'modules/core/email/send', template: template, data: object
+
+  if r.errors
+    log r.errors, type: 'errors.graphql.invalid'
+
+    hash_assign object['valid'] = false
+    hash_assign object['errors'] = r.errors
+  else
+    hash_assign object['valid'] = true
+  endif
+
+  return object
+%}
