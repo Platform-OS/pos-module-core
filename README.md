@@ -10,6 +10,8 @@ You can register your module and theme into the **module registry** with `hook_m
 
 There are **module helper** functions to check if a module or theme exists in the system, so that the other modules can use installed ones without hard dependencies.
 
+The core module also provides a command and the graphql mutation for **email sending**.
+
 ## Hooks
 
 You can choose to create new hooks either on your modules or inside your `app` folder. You can organize them into folders, for example, `app/views/partials/hooks/hook_permission.liquid` or `modules/your-module/public/views/partials/lib/hooks/hook_permission.liquid`.
@@ -184,6 +186,24 @@ function modules = 'modules/core/lib/queries/registry/get, type: 'module`
 function themes = 'modules/core/lib/queries/registry/get, type: 'theme`
 function all = 'modules/core/lib/queries/registry/get
 ```
+## Email sending
+
+The core module provides a command for email sending that you can call in your app or other modules:
+
+```
+{% parse_json object %}
+  {
+    "to":      "grievous@example.com",
+    "from":    "kenobi@example.com",
+    "subject": "Hello there!"
+  }
+{% endparse_json %}
+
+{% function _ = 'modules/core/lib/commands/email/send', template: 'general', object: object %}
+```
+
+The code above will send an email from `kenobi@example.com` to `grievous@example.com` with the subject of `Hello there!` using your email template partial `app/emails/general.liquid`. 
+You can pass additional data as part of the `object` and it'll be available as a `data` object in your email template.
 
 ## Headscripts hook
 
