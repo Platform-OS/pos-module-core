@@ -1,16 +1,8 @@
 {% liquid
-  if error_key
-    assign error = error_key | t
+  if message_key
+    assign message = message_key | t
   endif
-
-  if notice_key
-    assign notice = notice_key | t
-  endif
-
-  if info_key
-    assign info = info_key | t
-  endif
-  assign flash = null | hash_merge: error: error, notice: notice, info: info, from: context.location.pathname, now: force_clear
+  assign flash = null | hash_merge: message: message, severity: severity, from: context.location.pathname, now: force_clear
 
   assign sflash = flash | json
   session sflash = sflash
