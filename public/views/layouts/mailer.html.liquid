@@ -1,6 +1,6 @@
 {% liquid
-  assign languages = 'ar,arc,dv,fa,ha,he,khw,ks,ku,ps,ur,yi'  | split: ','
-  if languages contains lang
+  assign rtl_languages = 'ar,arc,dv,fa,ha,he,khw,ks,ku,ps,ur,yi'  | split: ','
+  if rtl_languages contains lang
     assign direction = 'rtl'
   else
     assign direction = 'ltr'
