@@ -1,0 +1,16 @@
+{% liquid
+  if object.type == blank
+    log 'ERROR: events broadcast type blank'
+    return null
+  endif
+
+  assign name = 'consumers/' | append: object.type | append: '/'
+  graphql consumers = 'modules/core/events/consumers', name: name | fetch: "admin_liquid_partials" | fetch: "results"
+
+  hash_assign object['consumers'] = consumers
+  for consumer in consumers
+    include consumer.path, event: object
+  endfor
+
+  return object
+%}

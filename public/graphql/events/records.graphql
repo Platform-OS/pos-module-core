@@ -1,0 +1,16 @@
+query search($id: ID, $limit: Int = 1 $ids: [ID!]) {
+  records(
+    per_page: $limit
+    sort: [ { created_at: { order: DESC } } ]
+    filter: {
+      id: { value: $id value_in: $ids }
+      deleted_at: { exists: false }
+    })
+  {
+    total_entries
+    results {
+      type: table
+      id
+    }
+  }
+}

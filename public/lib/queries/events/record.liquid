@@ -1,0 +1,12 @@
+{% liquid
+  if id == blank
+    log meta, type: 'Warning! searching for a record without ID'
+    return null
+  endif
+
+  graphql r = 'modules/core/events/records', id: id, limit: 1
+
+  assign record = r.records.results.first
+
+  return record
+%}

@@ -1,0 +1,11 @@
+query consumers($name: String) {
+  admin_liquid_partials(
+    filter: {
+      path: { contains: $name }
+    }
+  ) {
+    results {
+      path
+    }
+  }
+}
