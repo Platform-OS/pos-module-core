@@ -1,0 +1,7 @@
+{% liquid
+  if context.session[key] != blank
+    graphql r = 'modules/core/sessions/delete', name: key
+    return true
+  endif
+  return false
+%}
