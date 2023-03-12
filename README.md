@@ -157,6 +157,18 @@ function variable_va = 'modules/core/lib/queries/variable/get', name: 'VARIABLE_
 
 You can pass the `type` argument that can be array, integer, float, boolean, or object.
 
+## Session storage
+
+You can store small data in session. Session is connected with current browser session.
+
+``` liquid
+  assign data = null | hash_merge: bar: 'some value'
+
+  function _ = 'modules/core/commands/session/set, key: 'foo', value: data
+  function data = 'modules/core/commands/session/get', key: 'foo'
+  function _ = 'modules/core/commands/session/clear', key: 'foo'
+```
+
 ## Module registry
 
 You can register your module or theme by implementing `hook_module_info` under `partials/lib/hook/`. An info file should look like this:
