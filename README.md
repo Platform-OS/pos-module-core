@@ -139,6 +139,60 @@ request_headers: '{
 
 ```
 
+## Events
+
+Events are a way to organize code. They allows to add your logic to existing commands. They are executed asynchronously in background.
+  
+### Defining the event
+
+Event has a type and the structure. You define event by creating file in `app/lib/events/your_event_name`. Type of the event should be the name of something that happened in the past. In metadata you define structure of data that is passed to event. You have to validate if certain params are passed.
+
+`app/lib/events/something_happened`
+
+```
+---
+metadata:
+  event:
+    foo_id
+---
+{% liquid
+  assign c = '{ "errors": {}, "valid": true }' | parse_json
+
+  function c = 'modules/core/lib/validations/presence', c: c, object: object, field_name: 'foo_id'
+
+  return c
+%}
+```
+
+
+
+### Publishing event
+
+Once something happened in application you can publish event. Events should be published directly from page or from command.
+`app/views/pages/debug.liquid`
+
+```
+{% liquid
+  assign object = null | hash_merge: foo_id: "12345"
+  function _ = 'modules/core/commands/events/publish', type: 'something_happened', object: object
+%}
+```
+
+Once event is published we validate if event exists and is valid. It is stored in activities. So far nothing happens, to consume the event you have to write consumer.
+
+### Handling events
+
+To execute code on particular event you have to write consumer. There can be many consumers on one event. To create consumer create file in `app/lib/consumers/<name_of_the_event>/<name_of_your_file>`
+
+`app/lib/consumers/something_happened/do_something.liquid`
+
+``` liquid
+{% liquid
+  assign message = 'executed consumer for the event' | append: event
+  log message
+%}
+```
+
 ## Variable storage
 
 You can set a variable with

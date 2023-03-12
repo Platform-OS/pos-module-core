@@ -1,9 +1,10 @@
 {% liquid
-  function event = 'modules/core/commands/events/create/build', type: type, actor_id: actor_id, object_id: object_id, target_id: target_id
+  function event = 'modules/core/commands/events/create/build', type: type, object: object
   function event = 'modules/core/commands/events/create/check', object: event
   if event.valid
     function event = 'modules/core/commands/events/create/execute', object: event
     if event.valid
+      # log event, type: 'modules/core/commands/events event created'
       include 'modules/core/commands/events/broadcast/execute', object: event
     else
       log event, type: 'ERORR: modules/core/commands/events invalid'
