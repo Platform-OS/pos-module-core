@@ -195,15 +195,19 @@ The core module provides a command for email sending that you can call in your a
   {
     "to":      "grievous@example.com",
     "from":    "kenobi@example.com",
-    "subject": "Hello there!"
+    "cc": [],
+    "bcc": [],
+    "subject": "Hello there!",
+    "layout": "path/to/my_layout",
+    "partial": "path/to/email_partial",
+    "data": { "user": " { "first_name:" "John" } }
   }
 {% endparse_json %}
-
-{% function _ = 'modules/core/lib/commands/email/send', template: 'general', object: object %}
+{% function _ = 'modules/core/lib/commands/email/send', object: object %}
 ```
 
-The code above will send an email from `kenobi@example.com` to `grievous@example.com` with the subject of `Hello there!` using your email template partial `app/emails/general.liquid`. 
-You can pass additional data as part of the `object` and it'll be available as a `data` object in your email template.
+The code above will send an email from `kenobi@example.com` to `grievous@example.com` with the subject of `Hello there!` using your liquid partial `email_partial.liquid` with the layout file `my_layout`. 
+You can pass any additional data as part of the `object` and it'll be available in your `email_partial.liquid` partial as `data`.
 
 ## Headscripts hook
 

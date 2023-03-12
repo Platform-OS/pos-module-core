@@ -1,23 +1,17 @@
 {% liquid
-  unless template
-    if object.partial
-      assign template = 'modules/core/generic'
-    else
+  function object = 'modules/core/lib/commands/email/send/build', object: object
+  function object = 'modules/core/lib/commands/email/send/check', object: object
+
+  if object.valid
+    graphql r = 'modules/core/email/send', template: 'modules/core/generic', data: object
+    if r.errors
+      log r.errors, type: 'errors.graphql.invalid'
+
       hash_assign object['valid'] = false
-      hash_assign object['errors'] = 'Missing template or partial in email/send'
-      return object
+      hash_assign object['errors'] = r.errors
     endif
-  endunless
-
-  graphql r = 'modules/core/email/send', template: template, data: object
-
-  if r.errors
-    log r.errors, type: 'errors.graphql.invalid'
-
-    hash_assign object['valid'] = false
-    hash_assign object['errors'] = r.errors
   else
-    hash_assign object['valid'] = true
+    log object.errors, type: 'payload validation error in core: lib/commands/email'
   endif
 
   return object
