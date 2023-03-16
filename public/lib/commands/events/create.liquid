@@ -4,8 +4,7 @@
   if event.valid
     function event = 'modules/core/commands/events/create/execute', object: event
     if event.valid
-      # log event, type: 'modules/core/commands/events event created'
-      include 'modules/core/commands/events/broadcast/execute', object: event
+      include 'modules/core/commands/events/broadcast', object: event
     else
       log event, type: 'ERORR: modules/core/commands/events invalid'
     endif
