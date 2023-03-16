@@ -1,0 +1,9 @@
+---
+from:     "{{ data.from }}"
+layout:   "{{ data.layout }}"
+to:       "{{ data.to }}"
+cc:       "{{ data.cc }}"
+bcc:      "{{ data.bcc }}"
+subject:  "{{ data.subject }}"
+---
+{% include data.partial, data: data.data %}
