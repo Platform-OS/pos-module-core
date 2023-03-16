@@ -1,0 +1,6 @@
+{% liquid
+  assign now = 'now' | to_time
+  assign data = null | hash_merge: type: type, date: now, object: object
+
+  return data
+%}
