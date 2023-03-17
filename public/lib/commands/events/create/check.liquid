@@ -7,7 +7,7 @@
   assign name = 'events/' | append: object.type
   graphql event_check_partial = 'modules/core/events/events_checks', name: name | fetch: "admin_liquid_partials" | fetch: "results" | first
   if event_check_partial
-    function event_result = event_check_partial.path, object: object.object
+    function event_result = event_check_partial.path, event: object
     if event_result.valid != true
       hash_assign c['errors']['object'] = event_result.errors
       hash_assign c['valid'] = false
