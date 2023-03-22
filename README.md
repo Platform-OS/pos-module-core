@@ -147,7 +147,7 @@ Events are a way to organize code. They allows to add your logic to existing com
   
 ### Defining the event
 
-Event has a type and the structure. You define event by creating file in `app/lib/events/your_event_name`. Type of the event should be the name of something that happened in the past. In metadata you define structure of data that is passed to event. You have to validate if certain params are passed.
+Event has a type and the structure. Type of the event has to be unique and as it not scoped. You define event by creating file in `app/lib/events/your_event_name`. Type of the event should be the name of something that happened in the past. In metadata you define structure of data that is passed to event. You have to validate if certain params are passed.
 
 `app/lib/events/something_happened`
 
@@ -160,13 +160,14 @@ metadata:
 {% liquid
   assign c = '{ "errors": {}, "valid": true }' | parse_json
 
-  function c = 'modules/core/lib/validations/presence', c: c, object: object, field_name: 'foo_id'
+  function c = 'modules/core/lib/validations/presence', c: c, object: event, field_name: 'foo_id'
+  
+  # you can also enhance event object
+  hash_assign event['bar'] = 'extra info'
 
   return c
 %}
 ```
-
-
 
 ### Publishing event
 
@@ -194,6 +195,21 @@ To execute code on particular event you have to write consumer. There can be man
   log message
 %}
 ```
+
+For this example the event object will look as:
+
+``` json
+{
+  "id": "ActivityStreams::Activity.1382917",
+  "uuid": "22ed7654-9521-42dd-b5f0-02e79c03f749",
+  "foo_id": "12345",
+  "type": "something_happened",
+  "date": "2023-03-17T10:42:41.957Z"
+  "bar": "extra info"
+}
+```
+
+Events can be published and consumed by different parties. In application you can write a consumer that reacts on events published by module.
 
 ## Variable storage
 
