@@ -17,6 +17,9 @@
 
   if object.valid
     function object = 'modules/core/commands/execute', mutation_name: 'modules/core/statuses/create' object: object
+    if object.valid
+      function _ = 'modules/core/commands/events/publish', type: 'status_created', object: object
+    endif
   else
     log object, 'showme STATUS-INVALID'
   endif
