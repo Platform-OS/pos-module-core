@@ -1,0 +1,9 @@
+{% liquid
+  assign selection = selection | default: 'record'
+
+  graphql r = mutation_name, args: object
+
+  assign object = r[selection]
+  hash_assign object['valid'] = true
+  return object
+%}
