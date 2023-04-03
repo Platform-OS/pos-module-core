@@ -32,7 +32,6 @@ query search(
     results {
       id
       created_at
-      deleted_at
       type: table
 
       name: property(name: "name")
