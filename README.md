@@ -144,7 +144,7 @@ request_headers: '{
 ## Events
 
 Events are a way to organize code. They allows to add your logic to existing commands. They are executed asynchronously in background.
-  
+
 ### Defining the event
 
 Event has a type and the structure. Type of the event has to be unique and as it not scoped. You define event by creating file in `app/lib/events/your_event_name`. Type of the event should be the name of something that happened in the past. In metadata you define structure of data that is passed to event. You have to validate if certain params are passed.
@@ -161,7 +161,7 @@ metadata:
   assign c = '{ "errors": {}, "valid": true }' | parse_json
 
   function c = 'modules/core/lib/validations/presence', c: c, object: event, field_name: 'foo_id'
-  
+
   # you can also enhance event object
   hash_assign event['bar'] = 'extra info'
 
@@ -189,7 +189,7 @@ To execute code on particular event you have to write consumer. There can be man
 
 `app/lib/consumers/something_happened/do_something.liquid`
 
-``` liquid
+```liquid
 {% liquid
   assign message = 'executed consumer for the event' | append: event
   log message
@@ -198,7 +198,7 @@ To execute code on particular event you have to write consumer. There can be man
 
 For this example the event object will look as:
 
-``` json
+```json
 {
   "id": "ActivityStreams::Activity.1382917",
   "uuid": "22ed7654-9521-42dd-b5f0-02e79c03f749",
@@ -210,6 +210,52 @@ For this example the event object will look as:
 ```
 
 Events can be published and consumed by different parties. In application you can write a consumer that reacts on events published by module.
+
+## Status handling
+
+You can create a new status with a command so you will have a status history in your entity. When you creating a status, tha `status_created` event will be published with the status object, so you can create your consumer and set your entity's status cache (for example `c__status`) field.
+
+### Creating a status
+
+```liquid
+{% liquid
+  function res = 'modules/core/commands/statuses/create', name: 'app.statuses.transactions.success', reference_id: '2', requester_id: 'payment_webhook', reference_schema: 'modules/payments/transaction'
+%}
+```
+
+You can also set `timestamp` and `payload` if you need.
+
+### Deleting a status
+
+```liquid
+{% liquid
+  function res = 'modules/core/commands/statuses/delete', id: '75'
+%}
+```
+
+### Loading a status
+
+```liquid
+{% liquid
+  function res = 'modules/core/queries/statuses/find', id: '76'
+%}
+```
+
+### Searching for statuses
+
+```liquid
+{% liquid
+  function res = 'modules/core/queries/statuses/search', name: 'app.statuses.transactions.success', requester_id: 'stripe_webhook'
+%}
+```
+
+### Deleting a status
+
+```liquid
+{% liquid
+  function res = 'modules/core/commands/statuses/delete', id: '75'
+%}
+```
 
 ## Variable storage
 
@@ -233,7 +279,7 @@ You can pass the `type` argument that can be array, integer, float, boolean, or 
 
 You can store small data in session. Session is connected with current browser session.
 
-``` liquid
+```liquid
   assign data = null | hash_merge: bar: 'some value'
 
   function _ = 'modules/core/commands/session/set, key: 'foo', value: data
@@ -268,6 +314,7 @@ function modules = 'modules/core/lib/queries/registry/get, type: 'module`
 function themes = 'modules/core/lib/queries/registry/get, type: 'theme`
 function all = 'modules/core/lib/queries/registry/get
 ```
+
 ## Email sending
 
 The core module provides a command for email sending that you can call in your app or other modules:
@@ -288,7 +335,7 @@ The core module provides a command for email sending that you can call in your a
 {% function _ = 'modules/core/lib/commands/email/send', object: object %}
 ```
 
-The code above will send an email from `kenobi@example.com` to `grievous@example.com` with the subject of `Hello there!` using your liquid partial `email_partial.liquid` with the layout file `my_layout`. 
+The code above will send an email from `kenobi@example.com` to `grievous@example.com` with the subject of `Hello there!` using your liquid partial `email_partial.liquid` with the layout file `my_layout`.
 You can pass any additional data as part of the `object` and it'll be available in your `email_partial.liquid` partial as `data`.
 
 ## Headscripts hook
