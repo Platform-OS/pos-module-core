@@ -1,5 +1,5 @@
 {% liquid
-  function headscript_implementations = 'modules/core/lib/commands/hook/fire', hook: 'headscripts'
-  assign results = headscript_implementations | join: ''
-  return results | html_safe
+  # TODO: remove after rewriting dependent modules
+  function res = 'modules/core/lib/queries/headscripts/search'
+  return res
 %}

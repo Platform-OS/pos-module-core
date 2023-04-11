@@ -6,6 +6,6 @@
 {% endcomment %}
 
 {% liquid
-  graphql implementations = 'modules/core/hook/get_implementations', hook: hook
+  graphql implementations = 'modules/core/hook/search', hook: hook
   return implementations.admin_liquid_partials.results
 %}
