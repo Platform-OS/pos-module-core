@@ -1,0 +1,35 @@
+{% comment %}
+  params: @given
+          @compared_value
+          @field_name
+          @allow_equal
+          @message_gt
+          @message_gte
+          @key
+          @c
+{% endcomment %}
+{% liquid
+  assign allow_equal = allow_equal | default: false
+  assign result = false
+
+  if allow_equal
+    if given >= compared_value
+      assign result = true
+    endif
+  else
+    if given > compared_value
+      assign result = true
+    endif
+  endif
+
+  if result == false
+    if allow_equal
+      assign message = message_gte | default: key | default: 'modules/core/validation.number.greater_than_or_equal' | t: count: compared_value
+    else
+      assign message = message_gt | default: key | default: 'modules/core/validation.number.greater_than' | t: count: compared_value
+    endif
+    function c = 'modules/core/lib/helpers/register_error', contract: c, field_name: field_name, message: message
+  endif
+  return c
+%}
+
