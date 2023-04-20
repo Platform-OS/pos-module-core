@@ -13,18 +13,18 @@
     assign size = el.size
 
     if minimum != null and size < minimum
-      assign message = 'core.validation.length.minimum' | t: count: minimum, value: size
+      assign message = 'modules/core/validation.length.minimum' | t: count: minimum, value: size
       function c = 'modules/core/lib/helpers/register_error', contract: c, field_name: field_name, message: message
     endif
 
     if maximum != null and size > maximum
-      assign message = 'core.validation.length.maximum' | t: count: maximum, value: size
+      assign message = 'modules/core/validation.length.maximum' | t: count: maximum, value: size
       assign message = el | append: ' ' | append: message
       function c = 'modules/core/lib/helpers/register_error', contract: c, field_name: field_name, message: message
     endif
 
     if is != null and size != is
-      assign message = 'core.validation.length.is' | t: count: is, value: size
+      assign message = 'modules/core/validation.length.is' | t: count: is, value: size
       function c = 'modules/core/lib/helpers/register_error', contract: c, field_name: field_name, message: message
     endif
 

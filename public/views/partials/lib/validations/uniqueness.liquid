@@ -1,5 +1,5 @@
 {% liquid
-  assign key = key | default: 'core.validation.taken'
+  assign key = key | default: 'modules/core/validation.taken'
   assign value = object[field_name]
   if value != blank
     if object.id != blank

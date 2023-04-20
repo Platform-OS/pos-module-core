@@ -7,12 +7,14 @@
 {% liquid
   if given != expected
 
-    if not_verbose
-      assign msg = 'core.validation.equal_not_verbose' | t
-    else
-      assign msg = 'core.validation.equal' | t: given: given, expected: expected
+    if message == blank and key == blank
+      if not_verbose
+        assign message = 'test.should.equal_not_verbose' | t
+      else
+        assign message = 'test.should.equal' | t: given: given, expected: expected
+      endif
     endif
-    function c = 'modules/core/lib/helpers/register_error', contract: c, field_name: field_name, message: msg
+    function c = 'modules/core/lib/helpers/register_error', contract: c, field_name: field_name, message: message, key: key
   endif
   return c
 %}

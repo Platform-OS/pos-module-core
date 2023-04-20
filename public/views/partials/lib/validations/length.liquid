@@ -18,23 +18,23 @@
   endif
   if allow_blank != true
     if size == blank
-      assign message = message_blank | default: 'core.validation.length.blank' | t
+      assign message = message_blank | default: 'modules/core/validation.length.blank' | t
       function c = 'modules/core/lib/helpers/register_error', contract: c, field_name: field_name, message: message
     endif
   endif
 
   if minimum != null and size < minimum
-    assign message = message_minimum | default: 'core.validation.length.minimum' | t: count: minimum, value: size
+    assign message = message_minimum | default: 'modules/core/validation.length.minimum' | t: count: minimum, value: size
     function c = 'modules/core/lib/helpers/register_error', contract: c, field_name: field_name, message: message
   endif
 
   if maximum != null and size > maximum
-    assign message = message_maximum | default: 'core.validation.length.maximum' | t: count: maximum, value: size
+    assign message = message_maximum | default: 'modules/core/validation.length.maximum' | t: count: maximum, value: size
     function c = 'modules/core/lib/helpers/register_error', contract: c, field_name: field_name, message: message
   endif
 
   if is != null and size != is
-    assign message = message_is | default: 'core.validation.length.is' | t: count: is, value: size
+    assign message = message_is | default: 'modules/core/validation.length.is' | t: count: is, value: size
     function c = 'modules/core/lib/helpers/register_error', contract: c, field_name: field_name, message: message
   endif
 

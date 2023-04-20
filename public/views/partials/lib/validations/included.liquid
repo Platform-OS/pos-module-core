@@ -9,7 +9,7 @@
 {% liquid
   assign value = value | default: object[field_name]
   unless array contains value
-    assign key = key | default: "core.validation.not_included"
+    assign key = key | default: "modules/core/validation.not_included"
     function c = 'modules/core/lib/helpers/register_error', contract: c, field_name: field_name, key: key
   endunless
   return c

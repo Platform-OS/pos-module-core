@@ -7,7 +7,7 @@
 
 {% liquid
   if object[field_name] == blank
-    assign key = key | default: "core.validation.blank"
+    assign key = key | default: "modules/core/validation.blank"
     function c = 'modules/core/lib/helpers/register_error', contract: c, field_name: field_name, key: key
   endif
   return c
