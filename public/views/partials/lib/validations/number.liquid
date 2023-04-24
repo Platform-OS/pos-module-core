@@ -18,10 +18,7 @@
     function c = 'modules/core/lib/helpers/register_error', contract: c, field_name: field_name, message: message
   endif
 
-  if lte == blank
-    assign lte = 2147483647
-  endif
-  if number > lte
+  if lte != null and number > lte
     assign message = message_lte | default: 'modules/core/validation.number.lte' | t: count: lte, value: number
     function c = 'modules/core/lib/helpers/register_error', contract: c, field_name: field_name, message: message
   endif
