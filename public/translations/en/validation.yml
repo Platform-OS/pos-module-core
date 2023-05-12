@@ -41,3 +41,4 @@ en:
       uppercase: must include at least one upper case
       number: must include at least one number
     invalid: invalid
+    not_exist: not exist
