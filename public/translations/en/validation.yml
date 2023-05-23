@@ -6,6 +6,8 @@ en:
     blank: cannot be blank
     email: must be a valid email
     not_included: not valid value
+    array:
+      not_unique: elements must be unique
     hcaptcha: Captcha has not been solved properly, please try again
     length:
       minimum: is too short (minimum is %{count} characters)
