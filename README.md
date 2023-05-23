@@ -219,7 +219,7 @@ You can create a new status with a command so you will have a status history in 
 
 ```liquid
 {% liquid
-  function res = 'modules/core/commands/statuses/create', name: 'app.statuses.transactions.success', reference_id: '2', requester_id: 'payment_webhook', reference_schema: 'modules/payments/transaction'
+  function res = 'modules/core/commands/statuses/create', name: 'app.statuses.transactions.succeeded', reference_id: '2', requester_id: 'payment_webhook', reference_schema: 'modules/payments/transaction'
 %}
 ```
 
@@ -245,7 +245,7 @@ You can also set `timestamp` and `payload` if you need.
 
 ```liquid
 {% liquid
-  function res = 'modules/core/queries/statuses/search', name: 'app.statuses.transactions.success', requester_id: 'stripe_webhook'
+  function res = 'modules/core/queries/statuses/search', name: 'app.statuses.transactions.succeeded', requester_id: 'stripe_webhook'
 %}
 ```
 
@@ -340,7 +340,7 @@ You can pass any additional data as part of the `object` and it'll be available 
 
 ## Headscripts hook
 
-The core module provides a hook for other modules to register their head scripts (CSS, JS, metadata, etc).  
+The core module provides a hook for other modules to register their head scripts (CSS, JS, metadata, etc).
 The modules can implement a `hook_headscripts.liquid` file that returns standard HTML, then you can render the aggregated head scripts in you layout using the `headscripts/search` query:
 ```
 <!DOCTYPE html>
@@ -363,8 +363,8 @@ function exists = 'modules/core/lib/queries/module/exists', type: 'module'
 
 ## Validators
 
-The core module provides some basic helpers for data validation.  
-These validators can check if all required fields are provided, check uniqueness, data types (numbers are really a numbers and not letters) etc. Validators always return a hash with two keys - valid being either true or false, and if false - errors with details why the validation has failed.  
+The core module provides some basic helpers for data validation.
+These validators can check if all required fields are provided, check uniqueness, data types (numbers are really a numbers and not letters) etc. Validators always return a hash with two keys - valid being either true or false, and if false - errors with details why the validation has failed.
 You can find the core validators at `modules/core/public/views/partials/lib/validations`
 
 ## Contribution
