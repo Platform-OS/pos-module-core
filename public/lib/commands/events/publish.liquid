@@ -2,11 +2,11 @@
   assign delay = delay | default: 0.01
 
   unless type
-    log 'type is required', type: 'ERORR: modules/core/commands/events publish'
+    log 'type is required', type: 'ERROR: modules/core/commands/events publish'
     return false
   endunless
   unless object
-    log 'object is required', type: 'ERORR: modules/core/commands/events publish'
+    log 'object is required', type: 'ERROR: modules/core/commands/events publish'
     return false
   endunless
 

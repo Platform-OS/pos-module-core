@@ -6,10 +6,10 @@
     if event.valid
       include 'modules/core/commands/events/broadcast', object: event
     else
-      log event, type: 'ERORR: modules/core/commands/events invalid'
+      log event, type: 'ERROR: modules/core/commands/events invalid'
     endif
   else
-    log event, type: 'ERORR: modules/core/commands/events invalid'
+    log event, type: 'ERROR: modules/core/commands/events invalid'
   endif
 
   return event
