@@ -12,6 +12,18 @@
 {% endcomment %}
 {% liquid
   assign number = number | default: object[field_name]
+%}
+{% capture test1 %}{{ number }}{% endcapture %}
+{% capture test2 %}{{ test1 | plus: 0 }}{% endcapture %}
+{% liquid
+  if test1 != test2
+    assign message = message | default: 'modules/core/validation.number.invalid' | t: value: number
+    function c = 'modules/core/lib/helpers/register_error', contract: c, field_name: field_name, message: message
+
+    return c
+  endif
+
+  assign number = number | plus: 0
 
   if lt != null and number >= lt
     assign message = message_lt | default: 'modules/core/validation.number.lt' | t: count: lt, value: number
