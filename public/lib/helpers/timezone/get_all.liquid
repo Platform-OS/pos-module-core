@@ -1,0 +1,6 @@
+{% comment %}
+  we need the to_json | parse_json hack because time_zones.all is an array of TimeZoneDrop (not an object)
+  this prevents us from using array filters or pass the timezone as reference (return it from a function, etc)
+  should be fixed on the platform level
+{% endcomment %}
+{% return context.globals.time_zones.all | to_json | parse_json %}
