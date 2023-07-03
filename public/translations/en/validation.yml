@@ -39,6 +39,7 @@ en:
     not_uniq: not unique
     matches: not valid format
     not_truthy: not true
+    not_null: not null
     password:
       lowercase: must include at least one lower case
       uppercase: must include at least one upper case
