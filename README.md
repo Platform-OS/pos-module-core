@@ -12,6 +12,14 @@ There are **module helper** functions to check if a module or theme exists in th
 
 The core module also provides a command and the graphql mutation for **email sending**.
 
+## Installation
+
+Currently suggested approach is to use git submodules. It will be replaced with pOS module manager in the feature. For now, ensure `modules` directory exists in your root directory and add a git submodule:
+
+`mkdir modules && cd modules && git submodule add git@github.com:Platform-OS/pos-module-core.git`
+
+To update your modules to the newest version, use `git submodule update --recursive --remote`
+
 ## Hooks
 
 You can choose to create new hooks either on your modules or inside your `app` folder. You can organize them into folders, for example, `app/views/partials/hooks/hook_permission.liquid` or `modules/your-module/public/views/partials/lib/hooks/hook_permission.liquid`.
