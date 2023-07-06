@@ -16,7 +16,7 @@ The core module also provides a command and the graphql mutation for **email sen
 
 Currently suggested approach is to use git submodules. It will be replaced with pOS module manager in the feature. For now, ensure `modules` directory exists in your root directory and add a git submodule:
 
-`mkdir modules && cd modules && git submodule add git@github.com:Platform-OS/pos-module-core.git`
+`mkdir modules && git submodule add --name core git@github.com:Platform-OS/pos-module-core.git modules/core`
 
 To update your modules to the newest version, use `git submodule update --recursive --remote`
 
