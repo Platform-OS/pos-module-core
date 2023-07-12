@@ -8,15 +8,15 @@ There is a **variable storage** that can be used to set variables and get their 
 
 You can register your module and theme into the **module registry** with `hook_module_info`. In this info file, you can define your module's name, version, type (module or theme), and dependencies. Module registry will handle **dependency management** and **outdated versions**.
 
-There are **module helper** functions to check if a module or theme exists in the system, so that the other modules can use installed ones without hard dependencies.
+There are **module helper** functions to check if a module or theme exists in the system so that the other modules can use installed ones without complex dependencies.
 
 The core module also provides a command and the graphql mutation for **email sending**.
 
 ## Installation
 
-Currently suggested approach is to use git submodules. It will be replaced with pOS module manager in the feature. For now, ensure `modules` directory exists in your root directory and add a git submodule:
+The currently suggested approach is to use git submodules. It will be replaced with a pOS module manager in the feature. For now, ensure the `modules` directory exists in your root directory and add a git submodule:
 
-`mkdir modules && git submodule add --name core git@github.com:Platform-OS/pos-module-core.git modules/core`
+`git submodule add --name core git@github.com:Platform-OS/pos-module-core.git modules/core`
 
 To update your modules to the newest version, use `git submodule update --recursive --remote`
 
@@ -24,11 +24,11 @@ To update your modules to the newest version, use `git submodule update --recurs
 
 You can choose to create new hooks either on your modules or inside your `app` folder. You can organize them into folders, for example, `app/views/partials/hooks/hook_permission.liquid` or `modules/your-module/public/views/partials/lib/hooks/hook_permission.liquid`.
 
-Call the `modules/core/lib/commands/hook/fire` function with the `hook` name and optionally pass the `params` attribute. Params will be sent to all hook implementations. You can also set the `merge_to_object` boolean if you want to merge the hook results to one object.
+Call the `modules/core/lib/commands/hook/fire` function with the `hook` name and optionally pass the `params` attribute. Params will be sent to all hook implementations. You can also set the `merge_to_object` boolean to merge the hook results to one object.
 
 Create Liquid files named like `hook_HOOKNAME.liquid`, and the `fire` function will collect all results. It means that these hook implementations have to have a `return` tag - it can be `nil` but the `return` tag is necessary.
 
-It's possible to define **alter hooks** to modify the existing data before it will be handled (for example saved, rendered, etc).
+It's possible to define **alter hooks** to modify the existing data before it is handled (for example saved, rendered, etc).
 
 ### Examples
 
@@ -45,7 +45,7 @@ For example, we don't need params in the [Permission Module's](https://github.co
 
 and `results` will contain all available permissions in your application.
 
-The Permission Module implements its own hook with a permission related permissions, so in `modules/permission/public/views/partials/lib/hooks/hook_permission.liquid` you can find this:
+The Permission Module implements its own hook with permission-related permissions, so in `modules/permission/public/views/partials/lib/hooks/hook_permission.liquid` you can find this:
 
 ```
 {% liquid
@@ -88,7 +88,7 @@ function results = 'modules/core/lib/commands/hook/fire', hook: 'user_create', p
 hash_assign user['hook_results'] = results
 ```
 
-It means that if you want to do something when a user is created, you only need to create a file (or files in different folders or modules, it's up to you) called `hook_user_create`, and in this file you add your functionality.
+It means that if you want to do something when a user is created, you only need to create a file (or files in different folders or modules, it's up to you) called `hook_user_create`, and in this file, you add your functionality.
 
 For example, you can store additional values in your custom profile structure and you will be able to use the created user's ID as a reference. So your `app/views/partials/lib/hooks/hook_user_create.liquid` file would look like this:
 
@@ -108,7 +108,7 @@ For example, you can store additional values in your custom profile structure an
 %}
 ```
 
-Or another real world example can be to subscribe the user to a newsletter by calling an API of a 3rd party service. In this case your `hook_user_create.liquid` file would look like this:
+Or another real-world example can be to subscribe the user to a newsletter by calling an API of a 3rd party service. In this case, your `hook_user_create.liquid` file would look like this:
 
 ```
 {% if params.hook_params.subscribe %}
@@ -151,11 +151,11 @@ request_headers: '{
 
 ## Events
 
-Events are a way to organize code. They allows to add your logic to existing commands. They are executed asynchronously in background.
+Events are a way to organize code. They allow you to add your logic to existing commands. They are executed asynchronously in the background.
 
 ### Defining the event
 
-Event has a type and the structure. Type of the event has to be unique and as it not scoped. You define event by creating file in `app/lib/events/your_event_name`. Type of the event should be the name of something that happened in the past. In metadata you define structure of data that is passed to event. You have to validate if certain params are passed.
+Event has a type and structure. Type of the event has to be unique and as it not scoped. You define an event by creating a file in `app/lib/events/your_event_name`. The type of the event should be the name of something that happened in the past. In metadata, you define the structure of data that is passed to the event. You have to validate if certain parameters are passed.
 
 `app/lib/events/something_happened`
 
@@ -170,7 +170,7 @@ metadata:
 
   function c = 'modules/core/lib/validations/presence', c: c, object: event, field_name: 'foo_id'
 
-  # you can also enhance event object
+  # You can also enhance event object
   hash_assign event['bar'] = 'extra info'
 
   return c
@@ -179,7 +179,7 @@ metadata:
 
 ### Publishing event
 
-Once something happened in application you can publish event. Events should be published directly from page or from command.
+Once something happened in the application you can publish the event. Events should be published directly from the page or the command.
 `app/views/pages/debug.liquid`
 
 ```
@@ -189,11 +189,11 @@ Once something happened in application you can publish event. Events should be p
 %}
 ```
 
-Once event is published we validate if event exists and is valid. It is stored in activities. So far nothing happens, to consume the event you have to write consumer.
+Once the event is published we validate if the event exists and is valid. It is stored in activities. So far nothing happens, to consume the event you have to write consumer.
 
 ### Handling events
 
-To execute code on particular event you have to write consumer. There can be many consumers on one event. To create consumer create file in `app/lib/consumers/<name_of_the_event>/<name_of_your_file>`
+To execute code on a particular event you have to write consumer. There can be many consumers in one event. To create a consumer create a file in `app/lib/consumers/<name_of_the_event>/<name_of_your_file>`
 
 `app/lib/consumers/something_happened/do_something.liquid`
 
@@ -204,7 +204,7 @@ To execute code on particular event you have to write consumer. There can be man
 %}
 ```
 
-For this example the event object will look as:
+For this example, the event object will look as:
 
 ```json
 {
@@ -217,11 +217,11 @@ For this example the event object will look as:
 }
 ```
 
-Events can be published and consumed by different parties. In application you can write a consumer that reacts on events published by module.
+Events can be published and consumed by different parties. In the application, you can write a consumer that reacts to events published by the module.
 
 ## Status handling
 
-You can create a new status with a command so you will have a status history in your entity. When you creating a status, tha `status_created` event will be published with the status object, so you can create your consumer and set your entity's status cache (for example `c__status`) field.
+You can create a new status with a command so you will have a status history in your entity. When you create a status, the `status_created` event will be published with the status object, so you can create your consumer and set your entity's status cache (for example `c__status`) field.
 
 ### Creating a status
 
@@ -281,11 +281,11 @@ And you can get a variable value with
 function variable_va = 'modules/core/lib/queries/variable/find', name: 'VARIABLE_NAME', default: 'DEFAULT_VALUE'
 ```
 
-You can pass the `type` argument that can be array, integer, float, boolean, or object.
+You can pass the `type` argument that can be an array, integer, float, boolean, or object.
 
 ## Session storage
 
-You can store small data in session. Session is connected with current browser session.
+You can store small data in a session. A session is connected with the current browser session.
 
 ```liquid
   assign data = null | hash_merge: bar: 'some value'
@@ -349,7 +349,7 @@ You can pass any additional data as part of the `object` and it'll be available 
 ## Headscripts hook
 
 The core module provides a hook for other modules to register their head scripts (CSS, JS, metadata, etc).
-The modules can implement a `hook_headscripts.liquid` file that returns standard HTML, then you can render the aggregated head scripts in you layout using the `headscripts/search` query:
+The modules can implement a `hook_headscripts.liquid` file that returns standard HTML, then you can render the aggregated head scripts in your layout using the `headscripts/search` query:
 ```
 <!DOCTYPE html>
 <html lang="en">
@@ -363,7 +363,7 @@ The [Theme manager](https://github.com/Platform-OS/pos-module-theme-manager) mod
 
 ## Helpers
 
-You can check if a module or theme is installed to the project:
+You can check if a module or theme is installed on the project:
 
 ```
 function exists = 'modules/core/lib/queries/module/exists', type: 'module'
@@ -372,7 +372,7 @@ function exists = 'modules/core/lib/queries/module/exists', type: 'module'
 ## Validators
 
 The core module provides some basic helpers for data validation.
-These validators can check if all required fields are provided, check uniqueness, data types (numbers are really a numbers and not letters) etc. Validators always return a hash with two keys - valid being either true or false, and if false - errors with details why the validation has failed.
+These validators can check if all required fields are provided, check uniqueness, data types (numbers are really numbers and not letters), etc. Validators always return a hash with two keys - valid being either true or false, and if false - errors with details of why the validation has failed.
 You can find the core validators at `modules/core/public/views/partials/lib/validations`
 
 ## Contribution
