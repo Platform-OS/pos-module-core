@@ -7,7 +7,7 @@ module.exports = class extends Generator {
   constructor(args, opts) {
     super(args, opts);
 
-    this.description = 'Generate files for command with build and check phase';
+    this.description = 'Generate basic command files with build and check phase';
     this.argument('commandName', { type: String, required: true, description: 'name of the command' });
     this.props = {
       commandName: this.options.commandName
