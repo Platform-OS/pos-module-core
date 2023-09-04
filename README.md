@@ -20,6 +20,15 @@ Currently suggested approach is to use git submodules. It will be replaced with 
 
 To update your modules to the newest version, use `git submodule update --recursive --remote`
 
+## pOS instance configuration
+
+The default behaviour of modules is that the files are never deleted. It is assumed that the developers might not have access to all of the files, and thanks to this feature they are still able to overwrite some of the modules files without breaking them. Because core module is fully public, it is recommended to delete files on deploy. In order to do it, ensure your app/config.yml includes core module in the list `modules_that_allow_delete_on_deploy`:
+
+```
+modules_that_allow_delete_on_deploy:
+- core
+```
+
 ## Hooks
 
 You can choose to create new hooks either on your modules or inside your `app` folder. You can organize them into folders, for example, `app/views/partials/hooks/hook_permission.liquid` or `modules/your-module/public/views/partials/lib/hooks/hook_permission.liquid`.
