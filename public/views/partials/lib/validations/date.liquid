@@ -19,12 +19,12 @@
 
   if can_be_past == false and is_past
     assign message = message_can_be_past | default: 'modules/core/validation.date.can_be_past' | t: count: can_be_past, value: date
-    include 'modules/core/lib/helpers/register_error', contract: c, field_name: field_name, message: message
+    function c = 'modules/core/lib/helpers/register_error', contract: c, field_name: field_name, message: message
   endif
 
   if can_be_future == false and is_future
     assign message = message_can_be_future | default: 'modules/core/validation.date.can_be_future' | t: count: can_be_future, value: date
-    include 'modules/core/lib/helpers/register_error', contract: c, field_name: field_name, message: message
+    function c = 'modules/core/lib/helpers/register_error', contract: c, field_name: field_name, message: message
   endif
 
   if lt != null
