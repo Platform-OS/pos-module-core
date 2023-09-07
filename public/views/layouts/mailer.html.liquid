@@ -1,5 +1,5 @@
 {% liquid
-  assign rtl_languages = 'ar,arc,dv,fa,ha,he,khw,ks,ku,ps,ur,yi'  | split: ','
+  assign rtl_languages = 'ar,arc,dv,fa,ha,he,khw,ks,ku,ps,ur,yi' | split: ','
   if rtl_languages contains lang
     assign direction = 'rtl'
   else
@@ -37,7 +37,7 @@
     <div class="container">
       {{ content_for_layout }}
       <div class="footer">
-        <p>This message was sent from <a href="{{url}}">{{url}}</a></p>
+        <p>This message was sent from <a href="{{ url }}">{{ url }}</a></p>
       </div>
 
     </div>

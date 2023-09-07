@@ -5,8 +5,8 @@
     - id: String
 {% endcomment %}
 {% liquid
-  function object = 'modules/core/commands/statuses/delete/build',  id: id
-  function object = 'modules/core/commands/statuses/delete/check',  object: object
+  function object = 'modules/core/commands/statuses/delete/build', id: id
+  function object = 'modules/core/commands/statuses/delete/check', object: object
 
   if object.valid
     function object = 'modules/core/commands/execute', mutation_name: 'modules/core/statuses/delete', selection: 'record_delete', object: object
