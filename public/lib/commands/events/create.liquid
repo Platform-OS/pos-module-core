@@ -1,6 +1,6 @@
 {% liquid
   function event = 'modules/core/commands/events/create/build', type: type, object: object
-  function event = 'modules/core/commands/events/create/check', object: event
+  function event = 'modules/core/commands/events/create/check', object: event, type: type
   if event.valid
     function event = 'modules/core/commands/events/create/execute', object: event
     if event.valid
