@@ -10,7 +10,7 @@
     return false
   endunless
 
-  background job_id = "modules/core/commands/events/create", source_name: 'modules/core/commands/events/create' priority: 'low', type: type, object: object, actor_id: actor_id, delay: delay
+  background job_id = "modules/core/commands/events/create", source_name: 'modules/core/commands/events/create' priority: 'low', type: type, object: object, delay: delay
 
   return true
 %}
