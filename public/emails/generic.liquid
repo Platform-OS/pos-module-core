@@ -6,4 +6,8 @@ cc:       "{{ data.cc }}"
 bcc:      "{{ data.bcc }}"
 subject:  "{{ data.subject }}"
 ---
-{% include data.partial, data: data.data %}
+{% liquid
+  # platformos-check-disable
+  include data.partial, data: data.data
+  # platformos-check-enable
+%}
