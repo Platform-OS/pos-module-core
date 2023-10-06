@@ -16,7 +16,9 @@
   },
   "homepage": "https://github.com/Platform-OS/pos-module-core#readme",
   "devDependencies": {
-    "auto-changelog": "^2.4.0"
+    "auto-changelog": "^2.4.0",
+    "pluralize": "^8.0.0",
+    "yeoman-generator": "^5.9.0"
   },
   "auto-changelog": {
     "template": "changelog-template.hbs",
