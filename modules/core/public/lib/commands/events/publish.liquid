@@ -1,5 +1,6 @@
 {% liquid
   assign delay = delay | default: 0.01
+  assign max_attempts = max_attempts | default: 9
 
   unless type
     log 'type is required', type: 'ERROR: modules/core/commands/events publish'
@@ -10,7 +11,7 @@
     return false
   endunless
 
-  background job_id = "modules/core/commands/events/create", source_name: 'modules/core/commands/events/create' priority: 'low', type: type, object: object, delay: delay
+  background job_id = "modules/core/commands/events/create", source_name: 'modules/core/commands/events/create' priority: 'low', type: type, object: object, delay: delay, max_attempts: max_attempts
 
   return true
 %}
