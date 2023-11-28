@@ -1,6 +1,6 @@
 ---
 request_type: "{{ data.request_type }}"
-headers: '{{ data.headers | json }}'
+request_headers: '{{ data.headers | json }}'
 to: "{{ data.to }}"
 ---
 {% liquid
