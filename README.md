@@ -24,14 +24,11 @@ Go into your project directory and use `pos-cli modules install` command , which
 
 ### Pulling the source code
 
-In your app, you will invoke commands etc. defined in this module. Most likely sooner rather than later you will want to browse the source code of this module. We recommended adding `modules/core` into .gitignore and pull the source code via pos-cli:
-
-`pos-cli modules pull core`
-
 Modules are compatible with [platformOS Check](https://github.com/Platform-OS/platformos-lsp#platformos-check----a-linter-for-platformos), which we highly recommend you to install - it's compatible with any IDE supporting LSP. If you use VSCode, see [VSCode platformOS Check Extension](https://marketplace.visualstudio.com/items?itemName=platformOS.platformos-check-vscode)
 
+In order to be able to levarage LSP feature like autocomplete for `function`/`include`/`graphql` tags, you will need to have source code of the module in your project. We recommended adding `modules/core` into .gitignore (as you should not monkey patch module files, as it will make it hard to update the module to the newest version in the future) and pull the source code via pos-cli:
 
-### pOS instance configuration with source code
+`pos-cli modules pull core`
 
 The default behaviour of modules is that the files are never deleted. It is assumed that the developers might not have access to all of the files, and thanks to this feature they are still able to overwrite some of the modules files without breaking them. Because core module is fully public, it is recommended to delete files on deploy. In order to do it, ensure your app/config.yml includes core module in the list `modules_that_allow_delete_on_deploy`:
 
