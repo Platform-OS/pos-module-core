@@ -14,13 +14,24 @@ The core module also provides a command and the graphql mutation for **email sen
 
 ## Installation
 
-The currently suggested approach is to use git submodules. It will be replaced with a pOS module manager in the feature. For now, ensure the `modules` directory exists in your root directory and add a git submodule:
+This module is published in Partner Portal Modules Marketplace - https://partners.platformos.com/marketplace/pos_modules/126
 
-`git submodule add --name core git@github.com:Platform-OS/pos-module-core.git modules/core`
+To install it, you have to have [pos-cli](https://github.com/mdyd-dev/pos-cli#overview) installed.
 
-To update your modules to the newest version, use `git submodule update --recursive --remote`
+Go into your project directory and use `pos-cli modules install` command , which will create/update `app/pos-modules.json`:
 
-## pOS instance configuration
+`pos-cli modules install core`
+
+### Pulling the source code
+
+In your app, you will invoke commands etc. defined in this module. Most likely sooner rather than later you will want to browse the source code of this module. We recommended adding `modules/core` into .gitignore and pull the source code via pos-cli:
+
+`pos-cli modules pull core`
+
+Modules are compatible with [platformOS Check](https://github.com/Platform-OS/platformos-lsp#platformos-check----a-linter-for-platformos), which we highly recommend you to install - it's compatible with any IDE supporting LSP. If you use VSCode, see [VSCode platformOS Check Extension](https://marketplace.visualstudio.com/items?itemName=platformOS.platformos-check-vscode)
+
+
+### pOS instance configuration with source code
 
 The default behaviour of modules is that the files are never deleted. It is assumed that the developers might not have access to all of the files, and thanks to this feature they are still able to overwrite some of the modules files without breaking them. Because core module is fully public, it is recommended to delete files on deploy. In order to do it, ensure your app/config.yml includes core module in the list `modules_that_allow_delete_on_deploy`:
 
