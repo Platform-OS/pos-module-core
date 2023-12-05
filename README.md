@@ -18,19 +18,21 @@ This module is published in Partner Portal Modules Marketplace - https://partner
 
 To install it, you have to have [pos-cli](https://github.com/mdyd-dev/pos-cli#overview) installed.
 
-Go into your project directory and use `pos-cli modules install` command , which will create/update `app/pos-modules.json`:
+Go into your project directory and use `pos-cli modules install` command, which will create/update `app/pos-modules.json`:
 
 `pos-cli modules install core`
 
 ### Pulling the source code
 
-Modules are compatible with [platformOS Check](https://github.com/Platform-OS/platformos-lsp#platformos-check----a-linter-for-platformos), which we highly recommend you to install - it's compatible with any IDE supporting LSP. If you use VSCode, see [VSCode platformOS Check Extension](https://marketplace.visualstudio.com/items?itemName=platformOS.platformos-check-vscode)
+Modules are compatible with [platformOS Check](https://github.com/Platform-OS/platformos-lsp#platformos-check----a-linter-for-platformos), which we highly recommend you to install - it's compatible with any IDE supporting LSP. If you use VSCode, see [VSCode platformOS Check Extension](https://marketplace.visualstudio.com/items?itemName=platformOS.platformos-check-vscode).
 
-In order to be able to levarage LSP feature like autocomplete for `function`/`include`/`graphql` tags, you will need to have source code of the module in your project. We recommended adding `modules/core` into .gitignore (as you should not monkey patch module files, as it will make it hard to update the module to the newest version in the future) and pull the source code via pos-cli:
+To be able to leverage LSP features like autocomplete for `function`/`include`/`graphql` tags, you will need to have the source code of the module in your project. We recommended adding `modules/core` into .gitignore (as you should not monkey patch module files, as it will make it hard to update the module to the newest version in the future) and pulling the source code via pos-cli:
 
-`pos-cli modules pull core`
+`pos-cli modules pull core <env>`
 
-The default behaviour of modules is that the files are never deleted. It is assumed that the developers might not have access to all of the files, and thanks to this feature they are still able to overwrite some of the modules files without breaking them. Because core module is fully public, it is recommended to delete files on deploy. In order to do it, ensure your app/config.yml includes core module in the list `modules_that_allow_delete_on_deploy`:
+Please note you need to deploy your app to <env> first, to install the module, before you will be able to pull it.
+
+The default behavior of modules is that the files are never deleted. It is assumed that the developers might not have access to all of the files, and thanks to this feature they are still able to overwrite some of the module's files without breaking them. Because the core module is fully public, it is recommended to delete files on deployment. To do it, ensure your app/config.yml includes the core module in the list `modules_that_allow_delete_on_deploy`:
 
 ```
 modules_that_allow_delete_on_deploy:
@@ -43,7 +45,7 @@ You can choose to create new hooks either on your modules or inside your `app` f
 
 Call the `modules/core/lib/commands/hook/fire` function with the `hook` name and optionally pass the `params` attribute. Params will be sent to all hook implementations. You can also set the `merge_to_object` boolean to merge the hook results to one object.
 
-Create Liquid files named like `hook_HOOKNAME.liquid`, and the `fire` function will collect all results. It means that these hook implementations have to have a `return` tag - it can be `nil` but the `return` tag is necessary.
+Create Liquid files like `hook_HOOKNAME.liquid`, and the `fire` function will collect all results. It means that these hook implementations have to have a `return` tag - it can be `nil` but the `return` tag is necessary.
 
 It's possible to define **alter hooks** to modify the existing data before it is handled (for example saved, rendered, etc).
 
@@ -62,7 +64,7 @@ For example, we don't need params in the [Permission Module's](https://github.co
 
 and `results` will contain all available permissions in your application.
 
-The Permission Module implements its own hook with permission-related permissions, so in `modules/permission/public/views/partials/lib/hooks/hook_permission.liquid` you can find this:
+The Permission Module implements its hook with permission-related permissions, so in `modules/permission/public/views/partials/lib/hooks/hook_permission.liquid` you can find this:
 
 ```
 {% liquid
