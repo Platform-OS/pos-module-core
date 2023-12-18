@@ -5,6 +5,7 @@
 {% endcomment %}
 
 {% liquid
+  log 'Use modules/core/validations/hcaptcha instead of modules/core/lib/validations/hcaptcha ', type: 'DEPRECATION'
   assign hcaptcha_solved =  hcaptcha_params | hcaptcha
   unless hcaptcha_solved
     assign key = key | default: "modules/core/validation.hcaptcha"

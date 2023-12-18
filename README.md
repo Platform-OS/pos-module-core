@@ -39,6 +39,104 @@ modules_that_allow_delete_on_deploy:
 - core
 ```
 
+## Commands / business logic
+
+We recommend using commands to encapsulate business rules. By following our recommendation, you will improve the consistency of your code, so it will be easy to onboard new developers to the project and easier to take over existing projects. The advantage of using this architecture is that it will be easy to re-use the command - you will be able to execute it both in a live web request, as well as a background job.
+
+We recommend placing your commands in `lib/commands` directory (the old way, before introducing `lib` directory, was `views/partials/lib/commands`)
+
+The naming conventions that we use is `<resource>/<action>`, for example `users/create.liquid` or `order/cancel.liquid`.
+
+The command consists of 3 stages, which we recommend to split into 3 separate files.
+
+![CommandWorkFlow](https://trello-attachments.s3.amazonaws.com/5f2abc6a5aa3bc157e8cee0c/871x721/4b5846b5d0080662351977819dfcc02f/pos-command%282%29.png)
+
+A typical dummy command placed in `app/lib/dummy/create.liquid` would look like this:
+
+```liquid
+{%  liquid
+  function object = 'commands/dummy/create/build', object: object
+  function object = 'commands/dummy/create/check', object: object
+
+  if object.valid
+    function object = 'commands/dummy/create/execute', object: object
+  endif
+
+  return object
+%}
+```
+
+Note: Usually the `execute` step is about invoking a GraphQL mutation. If that's the case, you can use the generic execute function provided by the core module, which is located at `modules/core/public/lib/commands/execute.liquid`. Example usage to invoke GraphQL mutation defined in `app/graphql/dummy/create.graphql`:
+
+```liquid
+{%  liquid
+  # ...
+
+  if object.valid
+    function object = 'modules/core/commands/execute', mutation_name: 'dummy/create', selection: 'record_create', object: object
+  endif
+
+  # ...
+%}
+```
+
+### Build
+
+This is the place where you build input for the command. Typical use case is to invoke it with `context.params`, which include input provided by the user via submitting `<form>`, in order to normalize the input, do necessary type conversions, whitelist properties that the user is allowed to provide to the command etc.
+
+Example `app/lib/commands/dummy/build.liquid`:
+
+```liquid
+{% parse_json data %}
+  {
+    "title": {{ object.title | downcase | json }},
+    "uuid": {{ object.uuid | json }},
+    "c__score": 0
+  }
+{% endparse_json %}
+
+{% liquid
+  if data['uuid'] == blank
+    hash_assign data["uuid"] = '' | uuid | json
+  endif
+
+  return data
+%}
+```
+
+The example build command will generate uuid if not provided in params, will initiate the field c__score (c stands for cache) with 0 and will ensure that the title provided to the command is downcased.
+
+### Check
+
+This is the place where you validate the input - for example, you ensure all required fields are provided, you check uniqueness, check the format of the input etc. This always returns hash with two keys - `valid` being either `true` or `false`, and if `false` - `errors` with details why validation has failed.
+
+Example `app/lib/commands/dummy/check.liquid`:
+
+```liquid
+{% parse_json data %}
+  {
+    "title": {{ object.title | downcase | json }},
+    "uuid": {{ object.uuid | json }},
+    "c__score": 0
+  }
+{% endparse_json %}
+
+{% liquid
+  if data['uuid'] == blank
+    hash_assign data["uuid"] = '' | uuid | json
+  endif
+
+  return data
+%}
+```
+
+###
+  - execute - If validation succeeds, proceed with executing the command. Any error raised here should be considered 500 server error. If you allow errors here, it means there is something wrong with the code organisation, as all checks to prevent errors should be done in `validate` step.
+
+- commands are designed to be easily executed as background job [heavy commands - external API call, expensive operations computations, reports]
+- each command might produce an event
+
+
 ## Hooks
 
 You can choose to create new hooks either on your modules or inside your `app` folder. You can organize them into folders, for example, `app/views/partials/hooks/hook_permission.liquid` or `modules/your-module/public/views/partials/lib/hooks/hook_permission.liquid`.

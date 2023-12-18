@@ -7,7 +7,7 @@
           @is
 {% endcomment %}
 {% liquid
-
+  log 'Use modules/core/validations/each_element_length instead of modules/core/lib/validations/each_element_length ', type: 'DEPRECATION'
   for el in object[field_name]
 
     assign size = el.size

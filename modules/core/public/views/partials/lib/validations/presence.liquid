@@ -6,6 +6,7 @@
 {% endcomment %}
 
 {% liquid
+  log 'Use modules/core/validations/presence instead of modules/core/lib/validations/presence ', type: 'DEPRECATION'
   if object[field_name] == blank
     assign key = key | default: "modules/core/validation.blank"
     function c = 'modules/core/lib/helpers/register_error', contract: c, field_name: field_name, key: key

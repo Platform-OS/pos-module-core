@@ -10,9 +10,9 @@ metadata:
 {% liquid
   assign c = '{ "errors": {}, "valid": true }' | parse_json
 
-  function c = 'modules/core/lib/validations/presence', c: c, object: event, field_name: 'name'
-  function c = 'modules/core/lib/validations/presence', c: c, object: event, field_name: 'reference_id'
-  function c = 'modules/core/lib/validations/presence', c: c, object: event, field_name: 'requester_id'
+  function c = 'modules/core/validations/presence', c: c, object: event, field_name: 'name'
+  function c = 'modules/core/validations/presence', c: c, object: event, field_name: 'reference_id'
+  function c = 'modules/core/validations/presence', c: c, object: event, field_name: 'requester_id'
 
   return c
 %}

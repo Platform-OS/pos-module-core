@@ -13,6 +13,7 @@
           @c
 {% endcomment %}
 {% liquid
+  log 'Use modules/core/validations/exist_in_db instead of modules/core/lib/validations/exist_in_db ', type: 'DEPRECATION'
   assign property_name = property_name | default: ''
   assign property_value = property_value | default: ''
   assign scope_name = scope_name | default: ''

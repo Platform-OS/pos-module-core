@@ -1,4 +1,5 @@
 {% liquid
+  log 'Use modules/core/validations/uniqueness instead of modules/core/lib/validations/uniqueness ', type: 'DEPRECATION'
   assign key = key | default: 'modules/core/validation.taken'
   assign value = object[field_name]
   if value != blank
