@@ -335,7 +335,8 @@ Once something happened in the application you can publish the event. Events sho
 
 Once the event is published we validate if the event exists and is valid. It is stored in activities. So far nothing happens, to consume the event you have to write consumer.
 
-The `publish` command returns [BackgroundJob ID](https://documentation.platformos.com/best-practices/backend-performance/background-jobs).
+The `publish` command returns [BackgroundJob ID](https://documentation.platformos.com/best-practices/backend-performance/background-jobs). You are able to preview scheduled and running background jobs via pos-cli gui serve -> Background Jobs. BackgroundJobs created via `publish` command will have a naming convention of `modules/core/commands/events/create:<type>`.
+Note: Successfully processed jobs are deleted and are not visible in the UI anymore.
 
 ### Handling events
 

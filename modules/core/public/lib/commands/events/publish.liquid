@@ -12,7 +12,9 @@
     return null
   endunless
 
-  background job_id = "modules/core/commands/events/create", source_name: 'modules/core/commands/events/create' priority: priority, type: type, object: object, delay: delay, max_attempts: max_attempts
+  assign source_name = 'modules/core/commands/events/create:' | append: type
+
+  background job_id = "modules/core/commands/events/create", source_name: source_name, priority: priority, type: type, object: object, delay: delay, max_attempts: max_attempts
 
   return job_id
 %}
