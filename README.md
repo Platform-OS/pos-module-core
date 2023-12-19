@@ -365,7 +365,7 @@ Events can be published and consumed by different parties. In the application, y
 
 ### Debugging events
 
-The core module provides a simple UI to help you preview published events, re-trigger them etc. It is available only in staging environment at /_events
+The core module provides a simple UI to help you preview published events, re-trigger them etc. It is available only in staging environment at `/_events`
 
 ## Status handling
 
