@@ -7,7 +7,7 @@
           @is
 {% endcomment %}
 {% liquid
-
+  log 'Use modules/core/validations/unique_elements instead of modules/core/lib/validations/unique_elements ', type: 'DEPRECATION'
   assign unique_count = object[field_name] | uniq | size
 
   if unique_count != object[field_name].size

@@ -10,6 +10,7 @@
           @message_is
 {% endcomment %}
 {% liquid
+  log 'Use modules/core/validations/length instead of modules/core/lib/validations/length ', type: 'DEPRECATION'
   assign value = value | default: object[field_name]
   assign size = value.size
 

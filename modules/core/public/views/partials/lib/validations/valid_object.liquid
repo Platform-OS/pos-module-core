@@ -6,6 +6,7 @@
 {% endcomment %}
 
 {% liquid
+  log 'Use modules/core/validations/valid_object instead of modules/core/lib/validations/valid_object ', type: 'DEPRECATION'
   assign value = value | default: object[field_name]
   if value
     function check_object = check_function, object: value

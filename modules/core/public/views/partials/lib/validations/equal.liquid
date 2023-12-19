@@ -5,6 +5,7 @@
           @c
 {% endcomment %}
 {% liquid
+  log 'Use modules/core/validations/equal instead of modules/core/lib/validations/equal ', type: 'DEPRECATION'
   if given != expected
 
     if message == blank and key == blank

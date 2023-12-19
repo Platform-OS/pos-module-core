@@ -1,6 +1,7 @@
 {% liquid
-  function object = 'modules/core/lib/commands/email/send/build', object: object
-  function object = 'modules/core/lib/commands/email/send/check', object: object
+  log 'Use modules/core/commands/email/send instead of modules/core/lib/commands/email/send', type: 'DEPRECATION'
+  function object = 'modules/core/commands/email/send/build', object: object
+  function object = 'modules/core/commands/email/send/check', object: object
 
   if object.valid
     graphql r = 'modules/core/email/send', template: 'modules/core/generic', data: object

@@ -6,6 +6,7 @@
           @can_be_past
 {% endcomment %}
 {% liquid
+  log 'Use modules/core/validations/date instead of modules/core/lib/validations/date ', type: 'DEPRECATION'
   assign date = date | default: object[field_name] | to_date
 
   assign is_past =  date | is_date_in_past

@@ -7,6 +7,7 @@
     the object that will be passed to the alter hook to give extra information
 {% endcomment %}
 {% liquid
+  log 'Use modules/core/commands/hook/alter instead of modules/core/lib/commands/hook/alter', type: 'DEPRECATION'
   assign original_params = params_to_modify | deep_clone
 
   assign hook = '/hook_' | append: hook | append: '_alter'

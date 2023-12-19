@@ -12,6 +12,7 @@
 {% endcomment %}
 {% liquid
   assign number = number | default: object[field_name]
+  log 'Use modules/core/validations/number instead of modules/core/lib/validations/number ', type: 'DEPRECATION'
 %}
 {% capture test1 %}{{ number }}{% endcapture %}
 {% capture test2 %}{{ test1 | plus: 0 }}{% endcapture %}

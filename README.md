@@ -28,9 +28,7 @@ Modules are compatible with [platformOS Check](https://github.com/Platform-OS/pl
 
 To be able to leverage LSP features like autocomplete for `function`/`include`/`graphql` tags, you will need to have the source code of the module in your project. We recommended adding `modules/core` into .gitignore (as you should not monkey patch module files, as it will make it hard to update the module to the newest version in the future) and pulling the source code via pos-cli:
 
-`pos-cli modules pull core <env>`
-
-Please note you need to deploy your app to <env> first, to install the module, before you will be able to pull it.
+`pos-cli modules pull core`
 
 The default behavior of modules is that the files are never deleted. It is assumed that the developers might not have access to all of the files, and thanks to this feature they are still able to overwrite some of the module's files without breaking them. Because the core module is fully public, it is recommended to delete files on deployment. To do it, ensure your app/config.yml includes the core module in the list `modules_that_allow_delete_on_deploy`:
 
@@ -39,9 +37,136 @@ modules_that_allow_delete_on_deploy:
 - core
 ```
 
+## Commands / business logic
+
+We recommend using commands to encapsulate business rules. By following our recommendation, you will improve the consistency of your code, so it will be easy to onboard new developers to the project and easier to take over existing projects. The advantage of using this architecture is that it will be easy to re-use the command - you will be able to execute it both in a live web request, as well as a background job.
+
+We recommend placing your commands in `lib/commands` directory.
+
+The naming conventions that we use are `<resource>/<action>`, for example, `users/create.liquid` or `order/cancel.liquid`.
+
+Commands are designed to be easily executed as background jobs [heavy commands - external API call, expensive operations computations, reports]. Each command might produce an [Event](#events)
+
+You can use generator provided by the core module to quickly generate our recommend structure with initial code:
+
+```
+pos-cli generate modules/core/generators/command <command>
+```
+
+For example
+
+```
+pos-cli generate modules/core/generators/command dummy/create
+```
+
+The command consists of 3 stages, which we recommend to split into 3 separate files.
+
+![CommandWorkFlow](https://trello-attachments.s3.amazonaws.com/5f2abc6a5aa3bc157e8cee0c/871x721/4b5846b5d0080662351977819dfcc02f/pos-command%282%29.png)
+
+A typical dummy command placed in `app/lib/dummy/create.liquid` would look like this:
+
+```liquid
+{%  liquid
+  function object = 'commands/dummy/create/build', object: object
+  function object = 'commands/dummy/create/check', object: object
+
+  if object.valid
+    function object = 'commands/dummy/create/execute', object: object
+  endif
+
+  return object
+%}
+```
+
+### Build
+
+This is the place where you build input for the command. The typical use case is to invoke it with `context.params`, which include input provided by the user via submitting `<form>`, to normalize the input, do necessary type conversions, whitelist properties that the user is allowed to provide to the command, etc.
+
+Example `app/lib/commands/dummy/build.liquid`:
+
+```liquid
+{% parse_json data %}
+  {
+    "title": {{ object.title | downcase | json }},
+    "uuid": {{ object.uuid | json }},
+    "c__score": 0
+  }
+{% endparse_json %}
+
+{% liquid
+  if data['uuid'] == blank
+    hash_assign data["uuid"] = '' | uuid | json
+  endif
+
+  return data
+%}
+```
+
+The example build command will generate uuid if not provided in params, will initiate the field c__score (c stands for cache) with 0 and will ensure that the title provided to the command is downcased.
+
+### Check
+
+This is the place where you validate the input - for example, you ensure all required fields are provided, you check uniqueness, check the format of the input etc. This always returns hash with two keys - `valid` being either `true` or `false`, and if `false` - `errors` with details why validation has failed.
+
+The core module has already quite a few [built-in validators](#validators).
+
+Example `app/lib/commands/dummy/check.liquid`:
+
+```liquid
+{% liquid
+  assign c = '{ "errors": {}, "valid": true }' | parse_json
+
+  function c = 'lib/validations/presence', c: c, object: object, field_name: 'title'
+  function c = 'lib/validations/presence', c: c, object: object, field_name: 'uuid'
+  if object.title
+    function c = 'lib/validations/presence', c: c, object: object, field_name: 'title'
+    function c = 'lib/validations/length', c: c, object: object, field_name: 'title', minimum: 3
+    function c = 'lib/validations/length', c: c, object: object, field_name: 'title', maximum: 130
+  endif
+
+  function c = 'lib/validations/uniqueness', c: c, object: object, field_name: 'uuid'
+
+  assign object = object | hash_merge: c
+
+  return object
+%}
+
+```
+
+### Execute
+
+  If validation succeeds, proceed with executing the command - usually a single [platformOS GraphQL Mutation](https://documentation.platformos.com/get-started/build-your-first-app/saving-data-to-the-database#save-the-data-in-the-database). Any error raised here should be considered 500 server error. If you allow errors here, it means there is something wrong with the code organisation, as all checks to prevent errors should be done in the `check` step.
+
+Example `app/lib/commands/dummy/execute.liquid`:
+
+```liquid
+{% liquid
+  graphql r = 'dummy/create', args: object
+
+  assign object = r.record_create
+  hash_assign object['valid'] = true
+
+  return object
+%}
+```
+
+Note: Usually the `execute` step is about invoking a GraphQL mutation - if that's the case for your new command, you can use the generic execute function provided by the core module, which is located at `modules/core/public/lib/commands/execute.liquid`. Example usage to invoke GraphQL mutation defined in `app/graphql/dummy/create.graphql`:
+
+```liquid
+{%  liquid
+  # ...
+
+  if object.valid
+    function object = 'modules/core/commands/execute', mutation_name: 'dummy/create', selection: 'record_create', object: object
+  endif
+
+  # ...
+%}
+```
+
 ## Hooks
 
-You can choose to create new hooks either on your modules or inside your `app` folder. You can organize them into folders, for example, `app/views/partials/hooks/hook_permission.liquid` or `modules/your-module/public/views/partials/lib/hooks/hook_permission.liquid`.
+You can choose to create new hooks either on your modules or inside your `app` folder. You can organize them into folders, for example, `app/views/partials/hooks/hook_permission.liquid` or `modules/your-module/public/lib/hooks/hook_permission.liquid`.
 
 Call the `modules/core/lib/commands/hook/fire` function with the `hook` name and optionally pass the `params` attribute. Params will be sent to all hook implementations. You can also set the `merge_to_object` boolean to merge the hook results to one object.
 
@@ -109,7 +234,7 @@ hash_assign user['hook_results'] = results
 
 It means that if you want to do something when a user is created, you only need to create a file (or files in different folders or modules, it's up to you) called `hook_user_create`, and in this file, you add your functionality.
 
-For example, you can store additional values in your custom profile structure and you will be able to use the created user's ID as a reference. So your `app/views/partials/lib/hooks/hook_user_create.liquid` file would look like this:
+For example, you can store additional values in your custom profile structure and you will be able to use the created user's ID as a reference. So your `app/lib/hooks/hook_user_create.liquid` file would look like this:
 
 ```
 {% parse_json args %}
@@ -238,6 +363,10 @@ For this example, the event object will look as:
 
 Events can be published and consumed by different parties. In the application, you can write a consumer that reacts to events published by the module.
 
+### Debugging events
+
+The core module provides a simple UI to help you preview published events, re-trigger them etc. It is available only in staging environment at `/_events`
+
 ## Status handling
 
 You can create a new status with a command so you will have a status history in your entity. When you create a status, the `status_created` event will be published with the status object, so you can create your consumer and set your entity's status cache (for example `c__status`) field.
@@ -362,8 +491,15 @@ The core module provides a command for email sending that you can call in your a
 {% function _ = 'modules/core/lib/commands/email/send', object: object %}
 ```
 
-The code above will send an email from `kenobi@example.com` to `grievous@example.com` with the subject of `Hello there!` using your liquid partial `email_partial.liquid` with the layout file `my_layout`.
-You can pass any additional data as part of the `object` and it'll be available in your `email_partial.liquid` partial as `data`.
+The code above will send an email from `kenobi@example.com` to `grievous@example.com` with the subject of `Hello there!` using your liquid partial defined in `app/views/partials/path/to/email_partial.liquid` with the layout file defined in `app/views/layouts/path/to/my_layout.liquid`.
+
+You can pass any additional data as part of the `object` and it'll be available in your `app/views/partials/path/to/email_partial.liquid` partial as `data`:
+
+```liquid
+<h1>Hello {{ data.user.first_name }}!</h1>
+```
+
+Note: By default platformOS does not send real emails from staging environment - please ensure to [Configure test email on your instance](https://documentation.platformos.com/developer-guide/partner-portal/instances/configuring-test-email) to be able to send emails from staging environment.
 
 ## Headscripts hook
 
@@ -391,8 +527,10 @@ function exists = 'modules/core/lib/queries/module/exists', type: 'module'
 ## Validators
 
 The core module provides some basic helpers for data validation.
+
 These validators can check if all required fields are provided, check uniqueness, data types (numbers are really numbers and not letters), etc. Validators always return a hash with two keys - valid being either true or false, and if false - errors with details of why the validation has failed.
-You can find the core validators at `modules/core/public/views/partials/lib/validations`
+
+You can find the core validators at `modules/core/public/lib/validations`
 
 ## Generators
 
