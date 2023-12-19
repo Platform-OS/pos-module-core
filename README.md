@@ -126,8 +126,7 @@ Example `app/lib/commands/dummy/check.liquid`:
 
   function c = 'lib/validations/uniqueness', c: c, object: object, field_name: 'uuid'
 
-  hash_assign object['valid'] = c.valid
-  hash_assign object['errors'] = c.errors
+  assign object = object | hash_merge: c
 
   return object
 %}
