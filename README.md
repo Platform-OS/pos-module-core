@@ -41,7 +41,7 @@ modules_that_allow_delete_on_deploy:
 
 We recommend using commands to encapsulate business rules. By following our recommendation, you will improve the consistency of your code, so it will be easy to onboard new developers to the project and easier to take over existing projects. The advantage of using this architecture is that it will be easy to re-use the command - you will be able to execute it both in a live web request, as well as a background job.
 
-We recommend placing your commands in `lib/commands` directory (the old way, before introducing `lib` directory, was `views/partials/lib/commands`)
+We recommend placing your commands in `lib/commands` directory.
 
 The naming conventions that we use are `<resource>/<action>`, for example, `users/create.liquid` or `order/cancel.liquid`.
 
