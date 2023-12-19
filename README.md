@@ -335,6 +335,9 @@ Once something happened in the application you can publish the event. Events sho
 
 Once the event is published we validate if the event exists and is valid. It is stored in activities. So far nothing happens, to consume the event you have to write consumer.
 
+The `publish` command returns [BackgroundJob ID](https://documentation.platformos.com/best-practices/backend-performance/background-jobs). You are able to preview scheduled and running background jobs via pos-cli gui serve -> Background Jobs. BackgroundJobs created via `publish` command will have a naming convention of `modules/core/commands/events/create:<type>`.
+Note: Successfully processed jobs are deleted and are not visible in the UI anymore.
+
 ### Handling events
 
 To execute code on a particular event you have to write consumer. There can be many consumers in one event. To create a consumer create a file in `app/lib/consumers/<name_of_the_event>/<name_of_your_file>`
@@ -362,6 +365,12 @@ For this example, the event object will look as:
 ```
 
 Events can be published and consumed by different parties. In the application, you can write a consumer that reacts to events published by the module.
+
+If the consumer fails for whatever reason, platformOS will automatically re-try it after some time (the delay will increase with each unsuccessful attempt), up to 9 retries. This can be useful if consumer for example sends an API call to a third party and there is some kind of a network error. You can specify max amount of retry attempts by providing `max_attempts` argument to the publish command, for example preventing any retries would look like this:
+
+```
+  function _ = 'modules/core/commands/events/publish', type: 'something_happened', object: object, max_attempts: 0
+```
 
 ### Debugging events
 

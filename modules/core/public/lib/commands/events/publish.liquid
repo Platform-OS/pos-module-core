@@ -1,16 +1,20 @@
 {% liquid
   assign delay = delay | default: 0.01
+  assign priority = priority | default: 'low'
+  assign max_attempts = max_attempts | default: 9
 
   unless type
     log 'type is required', type: 'ERROR: modules/core/commands/events publish'
-    return false
+    return null
   endunless
   unless object
     log 'object is required', type: 'ERROR: modules/core/commands/events publish'
-    return false
+    return null
   endunless
 
-  background job_id = "modules/core/commands/events/create", source_name: 'modules/core/commands/events/create' priority: 'low', type: type, object: object, delay: delay
+  assign source_name = 'modules/core/commands/events/create:' | append: type
 
-  return true
+  background job_id = "modules/core/commands/events/create", source_name: source_name, priority: priority, type: type, object: object, delay: delay, max_attempts: max_attempts
+
+  return job_id
 %}
