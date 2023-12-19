@@ -43,9 +43,9 @@ We recommend using commands to encapsulate business rules. By following our reco
 
 We recommend placing your commands in `lib/commands` directory (the old way, before introducing `lib` directory, was `views/partials/lib/commands`)
 
-The naming conventions that we use is `<resource>/<action>`, for example `users/create.liquid` or `order/cancel.liquid`.
+The naming conventions that we use are `<resource>/<action>`, for example, `users/create.liquid` or `order/cancel.liquid`.
 
-Commands are designed to be easily executed as background job [heavy commands - external API call, expensive operations computations, reports]. Each command might produce an [Event](#events)
+Commands are designed to be easily executed as background jobs [heavy commands - external API call, expensive operations computations, reports]. Each command might produce an [Event](#events)
 
 You can use generator provided by the core module to quickly generate our recommend structure with initial code:
 
@@ -80,7 +80,7 @@ A typical dummy command placed in `app/lib/dummy/create.liquid` would look like 
 
 ### Build
 
-This is the place where you build input for the command. Typical use case is to invoke it with `context.params`, which include input provided by the user via submitting `<form>`, in order to normalize the input, do necessary type conversions, whitelist properties that the user is allowed to provide to the command etc.
+This is the place where you build input for the command. The typical use case is to invoke it with `context.params`, which include input provided by the user via submitting `<form>`, to normalize the input, do necessary type conversions, whitelist properties that the user is allowed to provide to the command, etc.
 
 Example `app/lib/commands/dummy/build.liquid`:
 
