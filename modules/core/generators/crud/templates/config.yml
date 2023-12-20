@@ -9,4 +9,8 @@ safe_translate: true
 skip_elasticsearch: false
 slug_exact_match: true
 websockets_require_csrf_token: true
+maintenance:
+  enabled: false
+  password_constant: 'MAINTENANCE_PASSWORD'
+  partial: 'maintenance'
 ---
