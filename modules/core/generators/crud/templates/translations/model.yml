@@ -8,6 +8,7 @@ en:
       list:
         add: Add <%= modelName %>
         empty_state: You haven't added any <%= modelNamePlural %> yet. <br> Create your first one now!
+        edit: Edit
       attr:
     <% attributes.forEach((attr) => { -%>
         <%= attr.name %>: <%= attr.nameHuman %>
