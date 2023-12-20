@@ -9,7 +9,7 @@ module.exports = class extends Generator {
     this.description = 'Generate table definition and commands for CRUD with graphql files';
     this.argument('modelName', { type: String, required: true, description: 'name of the table' });
     this.argument('attributes', { type: Array, required: false, description: 'table column names with types', default: [] });
-    // this.option('include-views', { type: Boolean, default: false, description: 'generate pages and partials', hide: 'show' });
+    this.option('include-views', { type: Boolean, default: false, description: 'generate pages and partials', hide: 'no' });
 
     const attributes = this.options.attributes.map((attr) => {
       const values = attr.split(':');
@@ -83,7 +83,7 @@ module.exports = class extends Generator {
         this.destinationPath(`app/lib/commands/${this.props.modelNamePlural}`),
         this.props
       )
-      if(this.options.includeViews){
+      if(this.options['include-views']){
         this.fs.copyTpl(
           this.templatePath('./views/pages/model'),
           this.destinationPath(`app/views/pages/${this.props.modelNamePlural}`),
