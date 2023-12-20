@@ -94,6 +94,11 @@ module.exports = class extends Generator {
           this.destinationPath(`app/views/partials/theme/simple/${this.props.modelNamePlural}`),
           this.props
         )
+        this.fs.copyTpl(
+          this.templatePath('./views/partials/theme/simple/field_error.liquid'),
+          this.destinationPath(`app/views/partials/theme/simple/field_error.liquid`),
+          this.props
+        )
       }
     } catch (e) {
       console.error(e);
