@@ -50,13 +50,19 @@ Commands are designed to be easily executed as background jobs [heavy commands -
 You can use generator provided by the core module to quickly generate our recommend structure with initial code:
 
 ```
-pos-cli generate modules/core/generators/command <command>
+pos-cli generate run modules/core/generators/command <command>
 ```
 
 For example
 
 ```
-pos-cli generate modules/core/generators/command dummy/create
+pos-cli generate run modules/core/generators/command dummy/create
+```
+
+You can also scaffold the whole CRUD at once, for example:
+
+```
+pos-cli generate run modules/core/generators/crud dummy title:string uuid:string c__score:integer --include-views
 ```
 
 The command consists of 3 stages, which we recommend to split into 3 separate files.
