@@ -31,7 +31,7 @@
                   {{ 'app.<%= modelNamePlural %>.list.edit' | t }}
                 </a>
                 <form action="/<%= modelNamePlural %>" method="post" class="inline ms-2" onSubmit="if(!confirm('{{ 'app.confirm-delete' | t }}')){ return false; }" >
-                  {% render 'authenticity_token', context: context %}
+                  <input type="hidden" name="authenticity_token" value="{{ context.authenticity_token }}">
                   <input type="hidden" name="_method" value="delete" />
                   <input type="hidden" name="id" value="{{ <%= modelName %>.id }}">
 
@@ -43,7 +43,7 @@
         </tbody>
       </table>
     {% else %}
-      {% render 'theme/simple/<%= modelNamePlural %>/empty_state', context: context %}
+      {% render 'theme/simple/<%= modelNamePlural %>/empty_state' %}
     {% endif %}
   </div>
 </div>

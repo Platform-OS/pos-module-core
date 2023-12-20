@@ -13,7 +13,6 @@
 
   assign matches = object[field_name] | matches: regexp
   if matches != true
-    assign msg = 'test.should.match' | t: given: given, expected: expected
     assign message = message | default: 'modules/core/validation.matches' | t
     function c = 'modules/core/lib/helpers/register_error', contract: c, field_name: field_name, message: message
   endif

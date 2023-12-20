@@ -4,9 +4,8 @@
       it can be: all, module, theme
 {% endcomment %}
 {% liquid
-  function registry = 'modules/core/lib/commands/hook/fire', hook: 'module_info'
+  function registry = 'modules/core/lib/commands/hook/fire', hook: 'module_info', merge_to_object: false
 
-  assign result = context.constants[name]
   case type
     when 'module'
       assign modules = '[]' | parse_json

@@ -7,7 +7,7 @@
 %}
 <div class="container flex flex-wrap mx-auto groups-center">
   <form action="/<%= modelNamePlural %>" method="post" class="w-full md:w-2/3">
-    {% render 'authenticity_token', context: context %}
+    <input type="hidden" name="authenticity_token" value="{{ context.authenticity_token }}">
     <input type="hidden" name="_method" value="{{method}}" />
 
     {% if object.id %}

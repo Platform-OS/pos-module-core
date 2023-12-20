@@ -13,6 +13,9 @@
   log 'Use modules/core/validations/length instead of modules/core/lib/validations/length ', type: 'DEPRECATION'
   assign value = value | default: object[field_name]
   assign size = value.size
+  assign is = is | default: null
+  assign minimum = minimum | default: null
+  assign maximum = maximum | default: null
 
   if allow_blank == null
     assign allow_blank = true

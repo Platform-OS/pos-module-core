@@ -15,6 +15,6 @@ slug: _events/:uuid/trigger
       hash_assign event['consumers'] = consumers
     endif
 
-    render 'modules/core/events/show', event: event, context: context
+    render 'modules/core/events/show', event: event
   endif
 %}

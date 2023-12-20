@@ -1,3 +1,4 @@
 {% liquid
-  render 'theme/simple/<%= modelNamePlural %>/new', context: context
+  assign object = '{}' | parse_json
+  render 'theme/simple/<%= modelNamePlural %>/new', object: object
 %}
