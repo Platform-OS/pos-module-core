@@ -83,6 +83,11 @@ module.exports = class extends Generator {
         this.destinationPath(`app/lib/commands/${this.props.modelNamePlural}`),
         this.props
       )
+      this.fs.copyTpl(
+        this.templatePath('./config.yml'),
+        this.destinationPath(`app/config.yml`),
+        this.props
+      )
       if(this.options['include-views']){
         this.fs.copyTpl(
           this.templatePath('./views/pages/model'),
