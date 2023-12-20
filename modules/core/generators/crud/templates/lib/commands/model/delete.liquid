@@ -1,8 +1,8 @@
 {% liquid
-  function object = 'commands/<%= modelNamePlural %>/delete/check',  object: object
+  function object = 'commands/<%= modelNamePlural %>/delete/check', object: object
 
   if object.valid
-    function object = 'commands/execute', mutation_name: '<%= modelNamePlural %>/delete', object: object
+    function object = 'modules/core/commands/execute', mutation_name: '<%= modelNamePlural %>/delete', object: object
   endif
 
   return object

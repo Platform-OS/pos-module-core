@@ -6,7 +6,7 @@ slug: <%= modelNamePlural %>/:id
   assign <%= modelName %>_id = context.params.id | split: '-' | last
   function <%= modelName %> = 'queries/<%= modelNamePlural %>/find', id: <%= modelName %>_id
   if <%= modelName %>.id
-    render 'theme/simple/<%= modelNamePlural %>/show', <%= modelName %>: <%= modelName %>, context: context
+    render 'theme/simple/<%= modelNamePlural %>/show', <%= modelName %>: <%= modelName %>
   else
     response_status 404
   endif

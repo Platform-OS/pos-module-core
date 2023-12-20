@@ -9,6 +9,6 @@ method: put
     include 'modules/core/helpers/redirect_to', url: '/<%= modelNamePlural %>'
     # platformos-check-enable ConvertIncludeToRender
   else
-    render 'theme/simple/<%= modelNamePlural %>/edit', object: object, context: context
+    render 'theme/simple/<%= modelNamePlural %>/edit', object: object
   endif
 %}

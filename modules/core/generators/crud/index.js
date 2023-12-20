@@ -64,8 +64,8 @@ module.exports = class extends Generator {
         this.props
       )
       this.fs.copyTpl(
-        this.templatePath('./schemas/model.yml'),
-        this.destinationPath(`app/schemas/${this.props.modelName}.yml`),
+        this.templatePath('./schema/model.yml'),
+        this.destinationPath(`app/schema/${this.props.modelName}.yml`),
         this.props
       )
       this.fs.copyTpl(

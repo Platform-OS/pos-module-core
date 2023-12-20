@@ -3,7 +3,7 @@
   function object = 'commands/<%= modelNamePlural %>/update/check', object: object
 
   if object.valid
-    function object = 'commands/execute', mutation_name: '<%= modelNamePlural %>/update' object: object
+    function object = 'modules/core/commands/execute', mutation_name: '<%= modelNamePlural %>/update' object: object
   endif
 
   return object
