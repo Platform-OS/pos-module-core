@@ -2,6 +2,6 @@
   "name": "Pos Module Core",
   "machine_name": "core",
   "type": "module",
-  "version": "1.4.6",
+  "version": "1.4.7",
   "dependencies": {}
 }

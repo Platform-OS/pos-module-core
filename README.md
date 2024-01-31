@@ -318,7 +318,7 @@ metadata:
 {% liquid
   assign c = '{ "errors": {}, "valid": true }' | parse_json
 
-  function c = 'modules/core/lib/validations/presence', c: c, object: event, field_name: 'foo_id'
+  function c = 'modules/core/validations/presence', c: c, object: event, field_name: 'foo_id'
 
   # You can also enhance event object
   hash_assign event['bar'] = 'extra info'
