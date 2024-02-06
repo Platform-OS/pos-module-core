@@ -3,6 +3,9 @@ query consumers($name: String) {
     filter: {
       path: { contains: $name }
     }
+    sort: {
+      path: { order: ASC }
+    }
   ) {
     results {
       path

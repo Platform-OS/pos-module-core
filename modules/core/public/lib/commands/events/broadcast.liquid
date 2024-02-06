@@ -9,9 +9,7 @@
 
   hash_assign object['consumers'] = consumers
   for consumer in consumers
-    # platformos-check-disable
-    include consumer.path, event: object
-    # platformos-check-enable
+    background _id = consumer.path, event: object
   endfor
 
   return object
