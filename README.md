@@ -347,10 +347,20 @@ Note: Successfully processed jobs are deleted and are not visible in the UI anym
 ### Handling events
 
 To execute code on a particular event you have to write consumer. There can be many consumers in one event. To create a consumer create a file in `app/lib/consumers/<name_of_the_event>/<name_of_your_file>`
+Consumer file can also define configuration options:
+  - priority - (String, default: default) defines how this consumer should be prioritized. Possible options are: low/default/high.
+  - max_attempts - (Int, default: 9) If the consumer fails for whatever reason, platformOS will automatically re-try it after some time (the delay will increase with each unsuccessful attempt), up to 9 retries. This can be useful if consumer for example sends an API call to a third party and there is some kind of a network error. You can specify max amount of retry attempts by providing `max_attempts` argument to the publish command, for example to prevent any retries max_attempts should be set to 0
+  - delay - (Float, default: 0) set a delay in minutes for triggering consumer. For time less than a minute, use fractions, for example 0.5 = 30 seconds
 
 `app/lib/consumers/something_happened/do_something.liquid`
 
 ```liquid
+---
+metadata:
+  priority: default
+  max_attempts: 9
+  delay: 0
+---
 {% liquid
   assign message = 'executed consumer for the event' | append: event
   log message
@@ -371,12 +381,6 @@ For this example, the event object will look as:
 ```
 
 Events can be published and consumed by different parties. In the application, you can write a consumer that reacts to events published by the module.
-
-If the consumer fails for whatever reason, platformOS will automatically re-try it after some time (the delay will increase with each unsuccessful attempt), up to 9 retries. This can be useful if consumer for example sends an API call to a third party and there is some kind of a network error. You can specify max amount of retry attempts by providing `max_attempts` argument to the publish command, for example preventing any retries would look like this:
-
-```
-  function _ = 'modules/core/commands/events/publish', type: 'something_happened', object: object, max_attempts: 0
-```
 
 ### Debugging events
 
