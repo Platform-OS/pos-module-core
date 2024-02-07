@@ -14,8 +14,8 @@
     if priorities contains consumer.metadata.priority
       assign priority = consumer.metadata.priority
     endif
-    assign max_attempts =  consumer.metadata.max_attempts | default: 9
-    assign delay =  consumer.metadata.delay | default: 0
+    assign max_attempts =  consumer.metadata.max_attempts | default: deprecated_max_attempts | default: 9
+    assign delay =  consumer.metadata.delay | default: deprecated_delay | default: 0
 
     background _id = consumer.path, event: object, priority: priority, delay: delay, max_attempts: max_attempts
   endfor

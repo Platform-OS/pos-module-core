@@ -17,7 +17,7 @@
 
   assign source_name = 'modules/core/commands/events/create:' | append: type
 
-  background job_id = "modules/core/commands/events/create", source_name: source_name, priority: 'high', type: type, object: object
+  background job_id = "modules/core/commands/events/create", source_name: source_name, priority: 'high', type: type, object: object, deprecated_max_attempts: max_attempts, deprecated_delay: delay
 
   return job_id
 %}
