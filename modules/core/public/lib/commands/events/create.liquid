@@ -4,7 +4,7 @@
   if event.valid
     function event = 'modules/core/commands/events/create/execute', object: event
     if event.valid
-      function _r = 'modules/core/commands/events/broadcast', object: event
+      function _r = 'modules/core/commands/events/broadcast', object: event, deprecated_max_attempts: deprecated_max_attempts, deprecated_delay: deprecated_delay
     else
       log event, type: 'ERROR: modules/core/commands/events invalid'
     endif
