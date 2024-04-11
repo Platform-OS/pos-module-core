@@ -5,11 +5,8 @@ on:
   #  paths-ignore:
   #    - ".github/**"
   #    - "tests/**"
-  #push:
-  #  branches: [ release_candidate ]
-  #  paths-ignore:
-  #    - ".github/**"
-  #    - "tests/**"
+  push:
+    branches: [ workflow-and-tests ]
   workflow_dispatch:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
