@@ -1,0 +1,110 @@
+name: E2E tests
+on:
+  #pull_request:
+  #  branches: [ release_candidate ]
+  #  paths-ignore:
+  #    - ".github/**"
+  #    - "tests/**"
+  #push:
+  #  branches: [ release_candidate ]
+  #  paths-ignore:
+  #    - ".github/**"
+  #    - "tests/**"
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  pre_job:
+    # continue-on-error: true # Uncomment once integration is finished
+    runs-on: ubuntu-latest
+    # Map a step output to a job output
+    outputs:
+      should_skip: ${{ steps.skip_check.outputs.should_skip }}
+    steps:
+      - id: skip_check
+        uses: fkirc/skip-duplicate-actions@master
+        with:
+          github_token: ${{ github.token }}
+          paths_ignore: '["**/README.md"]'
+
+  reserve-ci-instance:
+    needs: pre_job
+    if: ${{ needs.pre_job.outputs.should_skip != 'true' }}
+    runs-on: ubuntu-latest
+    container: alpine:3.15
+    outputs:
+      mpkit-url: ${{ steps.reserve.outputs.mpkit-url }}
+      report-path: ${{ steps.reserve.outputs.report-path }}
+    steps:
+      - name: Get ci-instance-url
+        id: reserve
+        uses: Platform-OS/ci-repository-reserve-instance-url@0.0.9
+        with:
+          repository-url: https://ci-repository.staging.oregon.platform-os.com
+          method: reserve
+          pos-ci-repo-token: ${{ secrets.POS_CI_REPO_ACCESS_TOKEN }}
+
+  deploy-and-test:
+    needs: ["reserve-ci-instance"]
+    if: ${{ needs.pre_job.outputs.should_skip != 'true' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      MPKIT_URL: ${{ needs.reserve-ci-instance.outputs.mpkit-url }}
+      MPKIT_EMAIL: ${{ secrets.MPKIT_EMAIL }}
+      MPKIT_TOKEN: ${{ secrets.MPKIT_TOKEN }}
+      CI: false
+      ACTIONS_ALLOW_UNSECURE_COMMANDS: true
+      DEBUG: 1
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          submodules: true
+
+      - name: Install pos-cli
+        shell: sh
+        run: |
+          set -e
+          npm install -g @platformos/pos-cli
+        env:
+          CI: true
+
+      - name: Install dependencies
+        if: steps.cache-node-modules.outputs.cache-hit != 'true'
+        shell: sh
+        run: npm run install
+        with:
+          path: modules/core
+
+      - name: Deploy
+        shell: sh
+        run: |
+          set -e
+          DEFAULT_ENV=""
+          POS_ENV="${1:-$DEFAULT_ENV}"
+
+          pos-cli deploy $POS_ENV
+        with:
+          path: modules/core
+
+      - name: Run e2e tests
+        shell: sh
+        run: |
+          set -e
+          npx playwright test
+        with:
+          path: modules/core
+
+  cleanup:
+    if: ${{ always() }}
+    needs: ["reserve-ci-instance", "deploy-and-test"]
+    runs-on: ubuntu-latest
+    container: alpine:3.15
+    steps:
+      - name: release ci-instance-url
+        uses: Platform-OS/ci-repository-reserve-instance-url@0.0.9
+        with:
+          method: release
+          repository-url: https://ci-repository.staging.oregon.platform-os.com
+          pos-ci-repo-token: ${{ secrets.POS_CI_REPO_ACCESS_TOKEN }}
