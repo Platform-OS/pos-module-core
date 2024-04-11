@@ -63,6 +63,10 @@ jobs:
           fetch-depth: 0
           submodules: true
 
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
       - name: Install pos-cli
         run: |
           set -e
