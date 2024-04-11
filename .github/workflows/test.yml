@@ -53,6 +53,10 @@ jobs:
       CI: false
       ACTIONS_ALLOW_UNSECURE_COMMANDS: true
       DEBUG: 1
+    defaults:
+      run:
+        shell: sh
+        working-directory: ./modules/core
     steps:
       - uses: actions/checkout@v4
         with:
@@ -60,7 +64,6 @@ jobs:
           submodules: true
 
       - name: Install pos-cli
-        shell: sh
         run: |
           set -e
           npm install -g @platformos/pos-cli
@@ -69,29 +72,20 @@ jobs:
 
       - name: Install dependencies
         if: steps.cache-node-modules.outputs.cache-hit != 'true'
-        shell: sh
         run: npm run install
-        with:
-          path: modules/core
 
       - name: Deploy
-        shell: sh
         run: |
           set -e
           DEFAULT_ENV=""
           POS_ENV="${1:-$DEFAULT_ENV}"
 
           pos-cli deploy $POS_ENV
-        with:
-          path: modules/core
 
       - name: Run e2e tests
-        shell: sh
         run: |
           set -e
           npx playwright test
-        with:
-          path: modules/core
 
   cleanup:
     if: ${{ always() }}
