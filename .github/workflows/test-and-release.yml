@@ -5,20 +5,19 @@ on:
     branches: [ workflow-and-tests ]
   workflow_dispatch:
 
-env:
-  run-tests: true
-  release: false
-
 jobs:
   call-test-workflow:
     uses: ./.github/workflows/test.yml
     if: ${{ run-tests }}
-    secrets: inherit
     with:
       project_root: ./modules/core 
+      run-tests: true
+    secrets: inherit
   call-release-workflow:
     uses: ./.github/workflows/release.yml
-    if: ${{ release }}
     needs: call-test-workflow
+    if: ${{ release }}
+    with:
+      release: false
     secrets: inherit
 
