@@ -1,11 +1,13 @@
 name: TestAndBuild 
-env:
-  run-tests: true
-  release: false
+
 on:
   push:
     branches: [ workflow-and-tests ]
   workflow_dispatch:
+
+env:
+  run-tests: true
+  release: false
 
 jobs:
   call-test-workflow:
