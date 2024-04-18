@@ -1,0 +1,23 @@
+name: TestAndBuild 
+env:
+  run-tests: true
+  release: false
+on:
+  push:
+    tags:
+      - '*'
+  workflow_dispatch:
+
+jobs:
+  call-test-workflow:
+    uses: ./.github/workflows/test.yml@main
+    if: ${{ env.run-tests }}
+    secrets: inherit
+    with:
+      project_root: ./modules/core 
+  call-release-workflow:
+    uses: ./.github/workflows/release.yml@main
+    if: ${{ env.release }}
+    needs: call-test-workflow
+    secrets: inherit
+

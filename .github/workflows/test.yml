@@ -1,13 +1,11 @@
 name: E2E tests
 on:
-  #pull_request:
-  #  branches: [ release_candidate ]
-  #  paths-ignore:
-  #    - ".github/**"
-  #    - "tests/**"
-  push:
-    branches: [ workflow-and-tests ]
-  workflow_dispatch:
+  workflow_call:
+    inputs:
+      module_root:
+        description: Base module directory for "Deploy" and "Run e2e tests" steps
+        required: true
+        type: string
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -45,6 +43,7 @@ jobs:
     needs: ["reserve-ci-instance"]
     if: ${{ needs.pre_job.outputs.should_skip != 'true' }}
     runs-on: ubuntu-latest
+    container: platformos/playwright:4.21.2-1.43.0
     timeout-minutes: 20
     env:
       MPKIT_URL: ${{ needs.reserve-ci-instance.outputs.mpkit-url }}
@@ -56,41 +55,22 @@ jobs:
     defaults:
       run:
         shell: sh
-        working-directory: ./modules/core
+        working-directory: ${{ inputs.module_root }}
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
           submodules: true
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 17
-
-      - name: Install pos-cli
-        run: |
-          set -e
-          npm install -g @platformos/pos-cli
-        env:
-          CI: true
-
-      - name: Install dependencies
-        if: steps.cache-node-modules.outputs.cache-hit != 'true'
-        run: |
-          npm install
-          npx playwright install
-
       - name: Deploy
         run: |
           set -e
           DEFAULT_ENV=""
           POS_ENV="${1:-$DEFAULT_ENV}"
-
           pos-cli deploy $POS_ENV
-
       - name: Run e2e tests
         run: |
           set -e
+          npm link @playwright/test
           npx playwright test
 
   cleanup:
