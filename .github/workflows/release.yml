@@ -3,6 +3,7 @@ on:
   push:
     tags:
       - '*'
+  workflow_call:
 
 jobs:
   pre_job:
