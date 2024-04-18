@@ -10,7 +10,7 @@ jobs:
     uses: ./.github/workflows/test.yml
     if: ${{ inputs.run-tests }}
     with:
-      project_root: ./modules/core 
+      module_root: ./modules/core
       run-tests: true
     secrets: inherit
   call-release-workflow:
