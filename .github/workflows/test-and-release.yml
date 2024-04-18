@@ -10,13 +10,13 @@ on:
 
 jobs:
   call-test-workflow:
-    uses: ./.github/workflows/test.yml@main
+    uses: ./.github/workflows/test.yml
     if: ${{ env.run-tests }}
     secrets: inherit
     with:
       project_root: ./modules/core 
   call-release-workflow:
-    uses: ./.github/workflows/release.yml@main
+    uses: ./.github/workflows/release.yml
     if: ${{ env.release }}
     needs: call-test-workflow
     secrets: inherit
