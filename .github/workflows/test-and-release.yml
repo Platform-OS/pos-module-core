@@ -4,8 +4,7 @@ env:
   release: false
 on:
   push:
-    tags:
-      - '*'
+    branches: [ workflow-and-tests ]
   workflow_dispatch:
 
 jobs:
