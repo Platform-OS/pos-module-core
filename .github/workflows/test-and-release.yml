@@ -8,7 +8,7 @@ on:
 jobs:
   call-test-workflow:
     uses: ./.github/workflows/test.yml
-    if: ${{ run-tests }}
+    if: ${{ inputs.run-tests }}
     with:
       project_root: ./modules/core 
       run-tests: true
@@ -16,7 +16,7 @@ jobs:
   call-release-workflow:
     uses: ./.github/workflows/release.yml
     needs: call-test-workflow
-    if: ${{ release }}
+    if: ${{ inputs.release }}
     with:
       release: false
     secrets: inherit
