@@ -68,10 +68,13 @@ jobs:
           DEFAULT_ENV=""
           POS_ENV="${1:-$DEFAULT_ENV}"
           pos-cli deploy $POS_ENV
-      - name: Run e2e tests
+      - name: Create a link to playwright
         run: |
           set -e
           npm link @playwright/test
+      - name: Run e2e tests
+        run: |
+          set -e
           npx playwright test
 
   cleanup:
