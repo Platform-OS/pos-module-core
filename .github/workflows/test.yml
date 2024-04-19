@@ -75,8 +75,8 @@ jobs:
       - name: Check contents of ./root/.cache/ms-playwright
         run: |
           set -e
-          ls -la ./root/.cache/
-          ls -la ./root/.cache/ms-playwright
+          ls -la /root/.cache/
+          ls -la /root/.cache/ms-playwright
       - name: Run e2e tests
         run: |
           set -e
