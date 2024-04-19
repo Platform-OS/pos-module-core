@@ -68,19 +68,13 @@ jobs:
           DEFAULT_ENV=""
           POS_ENV="${1:-$DEFAULT_ENV}"
           pos-cli deploy $POS_ENV
-      - name: Create a link to playwright
-        run: |
-          set -e
-          npm link @playwright/test
-      - name: Check contents of ./root/.cache/ms-playwright
-        run: |
-          set -e
-          ls -la /root/.cache/
-          ls -la /root/.cache/ms-playwright
       - name: Run e2e tests
         run: |
           set -e
+          npm link @playwright/test
           npx playwright test
+        env:
+          HOME: /root
 
   cleanup:
     if: ${{ always() }}
