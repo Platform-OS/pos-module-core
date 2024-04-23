@@ -53,6 +53,7 @@ jobs:
       CI: false
       ACTIONS_ALLOW_UNSECURE_COMMANDS: true
       DEBUG: 1
+      HOME: /root
     defaults:
       run:
         shell: sh
@@ -65,15 +66,11 @@ jobs:
       - name: Deploy
         run: |
           ./private/tests/scripts/deploy.sh
-        env:
-          HOME: /root
       - name: Run e2e tests
         run: |
           set -e
           npm link @playwright/test
           npx playwright test
-        env:
-          HOME: /root
 
   cleanup:
     if: ${{ always() }}
