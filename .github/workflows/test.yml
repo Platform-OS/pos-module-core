@@ -57,7 +57,6 @@ jobs:
     defaults:
       run:
         shell: sh
-        working-directory: ${{ inputs.module_root }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -65,12 +64,13 @@ jobs:
           submodules: true
       - name: Deploy
         run: |
-          ./private/tests/scripts/deploy.sh
+          ./modules/core/private/tests/scripts/deploy.sh
       - name: Run e2e tests
         run: |
           set -e
           npm link @playwright/test
           npx playwright test
+        working-directory: ${{ inputs.module_root }}
 
   cleanup:
     if: ${{ always() }}
