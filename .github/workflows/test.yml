@@ -53,6 +53,7 @@ jobs:
       CI: false
       ACTIONS_ALLOW_UNSECURE_COMMANDS: true
       DEBUG: 1
+      HOME: /root
     defaults:
       run:
         shell: sh
@@ -64,17 +65,12 @@ jobs:
           submodules: true
       - name: Deploy
         run: |
-          set -e
-          DEFAULT_ENV=""
-          POS_ENV="${1:-$DEFAULT_ENV}"
-          pos-cli deploy $POS_ENV
+          ./private/tests/scripts/deploy.sh
       - name: Run e2e tests
         run: |
           set -e
           npm link @playwright/test
           npx playwright test
-        env:
-          HOME: /root
 
   cleanup:
     if: ${{ always() }}
