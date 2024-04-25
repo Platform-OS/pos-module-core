@@ -1,11 +1,6 @@
 name: E2E tests
 on:
   workflow_call:
-    inputs:
-      module_root:
-        description: Base module directory for "Deploy" and "Run e2e tests" steps
-        required: true
-        type: string
   workflow_dispatch:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
@@ -64,13 +59,12 @@ jobs:
           submodules: true
       - name: Deploy
         run: |
-          ./modules/core/private/tests/scripts/deploy.sh
+          ./tests/scripts/deploy.sh
       - name: Run e2e tests
         run: |
           set -e
           npm link @playwright/test
           npx playwright test
-        working-directory: ${{ inputs.module_root }}
 
   cleanup:
     if: ${{ always() }}

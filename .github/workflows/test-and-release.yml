@@ -8,8 +8,6 @@ on:
 jobs:
   call-test-workflow:
     uses: ./.github/workflows/test.yml
-    with:
-      module_root: ./modules/core
     secrets: inherit
   #call-release-workflow:
   #  uses: ./.github/workflows/release.yml
