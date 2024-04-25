@@ -1,4 +1,4 @@
-import { test, expect } from 'playwright/test';
+import { test, expect } from '@playwright/test';
 
 const BASE_URL = process.env.MPKIT_URL.replace(/\/$/, '', '');
 
