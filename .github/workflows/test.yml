@@ -63,7 +63,6 @@ jobs:
       - name: Run e2e tests
         run: |
           set -e
-          npm link @playwright/test
           npx playwright test
 
   cleanup:
