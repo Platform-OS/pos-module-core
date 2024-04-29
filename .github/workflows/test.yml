@@ -39,7 +39,7 @@ jobs:
     needs: ["reserve-ci-instance"]
     if: ${{ needs.pre_job.outputs.should_skip != 'true' }}
     runs-on: ubuntu-latest
-    container: platformos/playwright:4.21.2-1.43.0
+    container: platformos/playwright:4.23.0-1.43.0
     timeout-minutes: 20
     env:
       MPKIT_URL: ${{ needs.reserve-ci-instance.outputs.mpkit-url }}
