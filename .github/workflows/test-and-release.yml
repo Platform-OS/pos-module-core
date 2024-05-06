@@ -7,10 +7,10 @@ on:
 
 jobs:
   call-test-workflow:
-    uses: ./.github/workflows/test.yml
+    uses: Platform-OS/pos-module-gh-workflows/.github/workflows/test.yml@main
     secrets: inherit
   #call-release-workflow:
-  #  uses: ./.github/workflows/release.yml
-  #  needs: call-test-workflow
-  #  secrets: inherit
+  # uses: Platform-OS/pos-module-gh-workflows/.github/workflows/release.yml@main
+  # needs: call-test-workflow
+  # secrets: inherit
 
