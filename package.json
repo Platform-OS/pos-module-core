@@ -1,0 +1,17 @@
+{
+  "name": "pos-module-core",
+  "version": "1.0.0",
+  "description": "The goal of this module is to extend the platformOS module system's possibilities.",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {},
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@playwright/test": "^1.43.1",
+    "@types/node": "^20.12.8"
+  }
+}
