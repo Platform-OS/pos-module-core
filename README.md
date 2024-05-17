@@ -69,7 +69,7 @@ The command consists of 3 stages, which we recommend to split into 3 separate fi
 
 ![CommandWorkFlow](https://trello-attachments.s3.amazonaws.com/5f2abc6a5aa3bc157e8cee0c/871x721/4b5846b5d0080662351977819dfcc02f/pos-command%282%29.png)
 
-A typical dummy command placed in `app/lib/dummy/create.liquid` would look like this:
+A typical dummy command placed in `app/lib/commands/dummy/create.liquid` would look like this:
 
 ```liquid
 {%  liquid
@@ -122,15 +122,15 @@ Example `app/lib/commands/dummy/check.liquid`:
 {% liquid
   assign c = '{ "errors": {}, "valid": true }' | parse_json
 
-  function c = 'lib/validations/presence', c: c, object: object, field_name: 'title'
-  function c = 'lib/validations/presence', c: c, object: object, field_name: 'uuid'
+  function c = 'modules/core/validations/presence', c: c, object: object, field_name: 'title'
+  function c = 'modules/core/validations/presence', c: c, object: object, field_name: 'uuid'
   if object.title
-    function c = 'lib/validations/presence', c: c, object: object, field_name: 'title'
-    function c = 'lib/validations/length', c: c, object: object, field_name: 'title', minimum: 3
-    function c = 'lib/validations/length', c: c, object: object, field_name: 'title', maximum: 130
+    function c = 'modules/core/validations/presence', c: c, object: object, field_name: 'title'
+    function c = 'modules/core/validations/length', c: c, object: object, field_name: 'title', minimum: 3
+    function c = 'modules/core/validations/length', c: c, object: object, field_name: 'title', maximum: 130
   endif
 
-  function c = 'lib/validations/uniqueness', c: c, object: object, field_name: 'uuid'
+  function c = 'modules/core/validations/uniqueness', c: c, object: object, field_name: 'uuid'
 
   assign object = object | hash_merge: c
 
@@ -174,7 +174,7 @@ Note: Usually the `execute` step is about invoking a GraphQL mutation - if that'
 
 You can choose to create new hooks either on your modules or inside your `app` folder. You can organize them into folders, for example, `app/views/partials/hooks/hook_permission.liquid` or `modules/your-module/public/lib/hooks/hook_permission.liquid`.
 
-Call the `modules/core/lib/commands/hook/fire` function with the `hook` name and optionally pass the `params` attribute. Params will be sent to all hook implementations. You can also set the `merge_to_object` boolean to merge the hook results to one object.
+Call the `modules/core/commands/hook/fire` function with the `hook` name and optionally pass the `params` attribute. Params will be sent to all hook implementations. You can also set the `merge_to_object` boolean to merge the hook results to one object.
 
 Create Liquid files like `hook_HOOKNAME.liquid`, and the `fire` function will collect all results. It means that these hook implementations have to have a `return` tag - it can be `nil` but the `return` tag is necessary.
 
@@ -188,14 +188,14 @@ For example, we don't need params in the [Permission Module's](https://github.co
 
 ```
 {% liquid
-  function permissions = 'modules/core/lib/commands/hook/fire', hook: 'permission'
+  function permissions = 'modules/core/commands/hook/fire', hook: 'permission'
   return permissions
 %}
 ```
 
 and `results` will contain all available permissions in your application.
 
-The Permission Module implements its hook with permission-related permissions, so in `modules/permission/public/views/partials/lib/hooks/hook_permission.liquid` you can find this:
+The Permission Module implements its hook with permission-related permissions, so in `modules/permission/public/lib/hooks/hook_permission.liquid` you can find this:
 
 ```
 {% liquid
@@ -234,7 +234,7 @@ For example, in the User Module, we created a hook called `user_create`. It look
 
 ```
 assign params = '{}' | parse_json | hash_merge: created_user: user.user, hook_params: hook_params
-function results = 'modules/core/lib/commands/hook/fire', hook: 'user_create', params: params, merge_to_object: true
+function results = 'modules/core/commands/hook/fire', hook: 'user_create', params: params, merge_to_object: true
 hash_assign user['hook_results'] = results
 ```
 
@@ -318,7 +318,7 @@ metadata:
 {% liquid
   assign c = '{ "errors": {}, "valid": true }' | parse_json
 
-  function c = 'modules/core/lib/validations/presence', c: c, object: event, field_name: 'foo_id'
+  function c = 'modules/core/validations/presence', c: c, object: event, field_name: 'foo_id'
 
   # You can also enhance event object
   hash_assign event['bar'] = 'extra info'
@@ -433,7 +433,7 @@ You can also set `timestamp` and `payload` if you need.
 You can set a variable with
 
 ```
-function res = 'modules/core/lib/commands/variable/set', name: 'VARIABLE_NAME', value: 'VARIABLE_VALUE'
+function res = 'modules/core/commands/variable/set', name: 'VARIABLE_NAME', value: 'VARIABLE_VALUE'
 ```
 
 This function will return the created variable's value.
@@ -441,7 +441,7 @@ This function will return the created variable's value.
 And you can get a variable value with
 
 ```
-function variable_va = 'modules/core/lib/queries/variable/find', name: 'VARIABLE_NAME', default: 'DEFAULT_VALUE'
+function variable_va = 'modules/core/queries/variable/find', name: 'VARIABLE_NAME', default: 'DEFAULT_VALUE'
 ```
 
 You can pass the `type` argument that can be an array, integer, float, boolean, or object.
@@ -460,7 +460,7 @@ You can store small data in a session. A session is connected with the current b
 
 ## Module registry
 
-You can register your module or theme by implementing `hook_module_info` under `partials/lib/hook/`. An info file should look like this:
+You can register your module or theme by implementing `hook_module_info` under `lib/hook/`. An info file should look like this:
 
 ```
 {% parse_json info %}
@@ -481,9 +481,9 @@ You can register your module or theme by implementing `hook_module_info` under `
 It is possible to list the registered modules and themes with
 
 ```
-function modules = 'modules/core/lib/queries/registry/search, type: 'module`
-function themes = 'modules/core/lib/queries/registry/search, type: 'theme`
-function all = 'modules/core/lib/queries/registry/search
+function modules = 'modules/core/queries/registry/search, type: 'module`
+function themes = 'modules/core/queries/registry/search, type: 'theme`
+function all = 'modules/core/queries/registry/search
 ```
 
 ## Email sending
@@ -503,7 +503,7 @@ The core module provides a command for email sending that you can call in your a
     "data": { "user": " { "first_name:" "John" } }
   }
 {% endparse_json %}
-{% function _ = 'modules/core/lib/commands/email/send', object: object %}
+{% function _ = 'modules/core/commands/email/send', object: object %}
 ```
 
 The code above will send an email from `kenobi@example.com` to `grievous@example.com` with the subject of `Hello there!` using your liquid partial defined in `app/views/partials/path/to/email_partial.liquid` with the layout file defined in `app/views/layouts/path/to/my_layout.liquid`.
@@ -524,7 +524,7 @@ The modules can implement a `hook_headscripts.liquid` file that returns standard
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    {% function headscripts = 'modules/core/lib/queries/headscripts/search' %}
+    {% function headscripts = 'modules/core/queries/headscripts/search' %}
     {{ headscripts }}
   </head>
 ```
@@ -536,7 +536,7 @@ The [Theme manager](https://github.com/Platform-OS/pos-module-theme-manager) mod
 You can check if a module or theme is installed on the project:
 
 ```
-function exists = 'modules/core/lib/queries/module/exists', type: 'module'
+function exists = 'modules/core/queries/module/exists', type: 'module'
 ```
 
 ## Validators
