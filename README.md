@@ -67,7 +67,7 @@ pos-cli generate run modules/core/generators/crud dummy title:string uuid:string
 
 The command consists of 3 stages, which we recommend to split into 3 separate files.
 
-![CommandWorkFlow](https://trello-attachments.s3.amazonaws.com/5f2abc6a5aa3bc157e8cee0c/871x721/4b5846b5d0080662351977819dfcc02f/pos-command%282%29.png)
+![CommandWorkflow](docs/commands.png)
 
 A typical dummy command placed in `app/lib/commands/dummy/create.liquid` would look like this:
 
