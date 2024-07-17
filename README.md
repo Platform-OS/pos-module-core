@@ -172,13 +172,13 @@ Note: Usually the `execute` step is about invoking a GraphQL mutation - if that'
 
 ## Hooks
 
-Hooks allow you to extend and customize the functionality of your modules or application. By using hooks, you can insert custom logic into various points of your application flow without altering the core code of existing modules.
+Hooks allow you and other developers to extend the functionality of your modules or applications without altering the existing code, but by writing a new one. It follows the Open/Close Principle. You achieve it by creating an entry point in a specific point in your application flow, which dynamically executes additional code implemented by matching hooks. 
 
-Hooks are defined in Liquid files within your project, typically under the `app` folder or directly within module folders. These hooks enable you to listen to specific events or triggers within the application and respond with customized logic.
+Hooks are defined via [Liquid partials](https://documentation.platformos.com/developer-guide/glossary#partial) that start with `hook_` prefix. We recommend placing them in `lib/hooks` directory. These partials (hooks) are executed via the core module's `modules/core/commands/hooks/fire` function described below.
 
 Organize your hooks into appropriate folders to maintain a clean project structure:
 
-- **Application Hooks**: Located in `app/views/partials/hooks/`, e.g., `hook_permission.liquid`
+- **Application Hooks**: Located in `app/lib/hooks/`, e.g., `hook_permission.liquid`
 - **Module Hooks**: Located in `modules/your-module/public/lib/hooks/`, e.g., `hook_permission.liquid`
 
 ### Implementing Hooks
@@ -189,17 +189,17 @@ Implementing a hook means providing the specific logic that should execute when 
 
 2. **Add Logic to the Hook**: In your hook implementation file, add the logic that should execute. This could include logging, data manipulation, or any other functionality.
 
-3. **Returning from Hooks**: Every hook implementation must return a value, even if it is `nil`. This ensures that the hook completes and optionally passes data back.
+3. **Returning from Hooks**: All hooks are invoked via [function](https://documentation.platformos.com/api-reference/liquid/platformos-tags#function), which means that every hook must use [return](https://documentation.platformos.com/api-reference/liquid/platformos-tags#return) tag, even if it is `return null`.
 
-**Note:** In order to actually use it, you need to fire it via `modules/core/commands/hook/fire` and provide your hook name as an argument - `my-hook`; otherwise it would be just a random file. 
+**Note:** To execute the hook, fire it via `modules/core/commands/hook/fire` function and provide your hook name as an argument - `my-hook`; combination of a naming convention (`hook_` prefix) and using the core module's function turns the Liquid partial into a hook. 
 
 ### Declaring and Configuring Hooks
 
 To make a hook available for implementation by others, you need to declare and configure it within your project. This setup allows others to extend and customize your code without altering the core functionality.
 
-To make a hook operational and integrate it into your application’s logic, you must explicitly call it using the `modules/core/commands/hook/fire` function. This involves specifying the hook's name as an argument to ensure it is targeted for execution.
+To make a hook operational and integrate it into your application’s logic, you must explicitly call it using the `modules/core/commands/hook/fire` function. This involves specifying the hook's name (without `hook_` prefix).
 
-For example, if you have declared a hook named `my-hook`, you must fire it as follows:
+For example, if you have declared a hook named `my-hook` (for example by creating a file `app/lib/hooks/hook_my-hook.liquid`), you fire it as follows:
 
 ```liquid
 {% liquid
@@ -207,7 +207,7 @@ For example, if you have declared a hook named `my-hook`, you must fire it as fo
 %}
 ```
 
-When you fire a hook using the `hook/fire` command, the system dynamically searches for all Liquid files that match the pattern `hook_<hook_name>`. This means if you fire `my-hook`, the system looks for files named `hook_my-hook.liquid`.
+When you fire a hook using the `modules/core/commands/hook/fire` command, the system dynamically searches for all Liquid files that match the pattern `hook_<hook_name>`. If you fire `my-hook`, the system looks for partials whose path ends with `/hook_my-hook`.
 
 Find the [fire.liquid implementation here](https://github.com/Platform-OS/pos-module-core/blob/master/modules/core/public/lib/commands/hook/fire.liquid).
 
