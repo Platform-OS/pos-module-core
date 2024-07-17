@@ -213,6 +213,37 @@ Find the [fire.liquid implementation here](https://github.com/Platform-OS/pos-mo
 
 **Parameters and Result Merging**: When firing a hook, you can pass data using the `params` attribute, which will be forwarded to all implementations of the hook. The `merge_to_object` attribute can be used to combine results from different hook implementations into a single object.
 
+### Example for Demonstrating Purpose
+
+To illustrate the dynamic nature of hooks, consider the following example. If you have code like this anywhere in your project, let's say in `app/views/pages/test-hook.liquid`:
+
+```liquid
+{% liquid
+  log "Hello"
+  function results = 'modules/core/commands/hook/fire', hook: 'add-code-dynamically'
+  log "Bye"
+%}
+```
+
+And then you create a file `app/lib/hooks/hook_add-code-dynamically.liquid` with content:
+
+```liquid
+{% log "I'm here" %}
+{% return null %}
+```
+
+When you invoke `https://example.com/test-hook` and check the logs using `pos-cli logs <env>`, you should see:
+
+```
+[2024-07-15 14:48:24.413Z] - info: Hello
+path: /test-hook page: test-hook
+[2024-07-15 14:48:24.434Z] - info: I'm here
+path: /test-hook page: test-hook partial: hooks/hook_add-code-dynamically
+[2024-07-15 14:48:24.434Z] - info: Bye
+```
+
+This demonstrates how the hook system dynamically integrates additional logic at runtime without altering the original code structure.
+
 ### Additional Hook Options
 
 - Define [**alter hooks**](https://github.com/Platform-OS/pos-module-core/blob/master/modules/core/public/lib/commands/hook/alter.liquid) to modify data before it is processed further, such as before saving to the database or rendering to the user.
