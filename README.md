@@ -325,7 +325,9 @@ Here's how you can record an event in platformOS:
 {% function _ = 'modules/core/commands/events/publish', type: 'order_placed', object: order_object %}
 ```
 
-This function logs an event of type `order_placed`, which can then trigger other actions in the system.
+This function logs an event of the type `order_placed`, which can then trigger other actions within the system. It's important to note that this method does not use the typical `record_create` but rather `activity_create` to log the event as an activity.
+
+For more detailed information on how activities are handled in platformOS, please refer to the [Activity Feeds documentation](https://documentation.platformos.com/developer-guide/activity-feeds/activity-feeds).
 
 ### Defining the event
 
