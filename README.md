@@ -301,11 +301,37 @@ request_headers: '{
 
 ## Events
 
-Events are a way to organize code. They allow you to add your logic to existing commands. They are executed asynchronously in the background.
+**Events**allow you to record that something has happened in the system. Think of them as logs that capture these actions. When an event occurs, other parts of the application might need to react to it. In platformOS, these events are stored using GraphQL mutations and can include various arguments detailing what happened. They enable you to add logic to existing commands and are executed asynchronously in the background.
+
+### Practical Uses of Events
+
+- **Form Submissions**: When a user submits a contact form, an event can log this action and trigger follow-up actions such as sending a confirmation email or updating a CRM system.
+- **Data Processing Completion**: Once a background job processes data, an event can signal completion, notifying other systems or updating the user interface to reflect the new data.
+- **Real-Time Updates**: Events can send real-time notifications to users, such as alerts for new messages, status updates, or system alerts.
+
+### Example Scenario
+
+Imagine you have an e-commerce platform where users can place orders. When an order is placed, several things need to happen:
+1. The order needs to be saved in the database.
+2. An email confirmation needs to be sent to the user.
+3. The inventory needs to be updated.
+4. The sales team needs to be notified.
+
+By creating an event when the order is placed, each of these actions can be handled separately by different parts of the application, ensuring a clean and manageable codebase.
+
+Here's how you can record an event in platformOS:
+
+```liquid
+{% function _ = 'modules/core/commands/events/publish', type: 'order_placed', object: order_object %}
+```
+
+This function logs an event of the type `order_placed`, which can then trigger other actions within the system. It's important to note that this method does not use the typical `record_create` but rather `activity_create` to log the event as an activity.
+
+For more detailed information on how activities are handled in platformOS, please refer to the [Activity Feeds documentation](https://documentation.platformos.com/developer-guide/activity-feeds/activity-feeds).
 
 ### Defining the event
 
-Event has a type and structure. Type of the event has to be unique and as it not scoped. You define an event by creating a file in `app/lib/events/your_event_name`. The type of the event should be the name of something that happened in the past. In metadata, you define the structure of data that is passed to the event. You have to validate if certain parameters are passed.
+An event in platformOS has a type and structure. The event type must be unique and is not scoped. To define an event, create a file in `app/lib/events/your_event_name`. The event type should reflect an action that occurred in the past. The metadata section defines the structure of the data passed to the event, and you must validate that certain parameters are passed.
 
 `app/lib/events/something_happened`
 
@@ -327,9 +353,10 @@ metadata:
 %}
 ```
 
-### Publishing event
+### Publishing the Event
 
-Once something happened in the application you can publish the event. Events should be published directly from the page or the command.
+Once something happened in the application, you can publish the event. Events should be published directly from a page or a command.
+
 `app/views/pages/debug.liquid`
 
 ```
@@ -339,20 +366,24 @@ Once something happened in the application you can publish the event. Events sho
 %}
 ```
 
-Once the event is published we validate if the event exists and is valid. It is stored in activities. So far nothing happens, to consume the event you have to write consumer.
+Upon publishing, the event is validated and stored in activities. However, to act upon this event, you need to write a consumer.
 
-The `publish` command returns [BackgroundJob ID](https://documentation.platformos.com/best-practices/backend-performance/background-jobs). You are able to preview scheduled and running background jobs via pos-cli gui serve -> Background Jobs. BackgroundJobs created via `publish` command will have a naming convention of `modules/core/commands/events/create:<type>`.
-Note: Successfully processed jobs are deleted and are not visible in the UI anymore.
+The `publish` command returns a [BackgroundJob ID](https://documentation.platformos.com/best-practices/backend-performance/background-jobs). You can view scheduled and running background jobs via `pos-cli gui serve -> Background Jobs`. Background jobs created through the `publish` command follow the naming convention `modules/core/commands/events/create:<type>`.
 
-### Handling events
+**Note:** Successfully processed jobs are deleted and are not visible in the UI anymore.
 
-To execute code on a particular event you have to write consumer. There can be many consumers in one event. To create a consumer create a file in `app/lib/consumers/<name_of_the_event>/<name_of_your_file>`
-Consumer file can also define configuration options:
-  - priority - (String, default: default) defines how this consumer should be prioritized. Possible options are: low/default/high.
-  - max_attempts - (Int, default: 9) If the consumer fails for whatever reason, platformOS will automatically re-try it after some time (the delay will increase with each unsuccessful attempt), up to 9 retries. This can be useful if consumer for example sends an API call to a third party and there is some kind of a network error. You can specify max amount of retry attempts by providing `max_attempts` argument to the publish command, for example to prevent any retries max_attempts should be set to 0
-  - delay - (Float, default: 0) set a delay in minutes for triggering consumer. For time less than a minute, use fractions, for example 0.5 = 30 seconds
+### Handling Events
 
-`app/lib/consumers/something_happened/do_something.liquid`
+To execute code when a specific event occurs, you need to create a consumer. Multiple consumers can be associated with a single event. To create a consumer, follow these steps:
+
+1. Create a file in the `app/lib/consumers/<name_of_the_event>/<name_of_your_file>` directory.
+
+2. Define configuration options in the consumer file. Here are some options you can set:
+   - **priority**: (String, default: `default`) Defines the consumer's priority. Possible values: `low`, `default`, `high`.
+   - **max_attempts**: (Int, default: `9`) If the consumer fails, platformOS will automatically retry it up to the specified number of attempts. This is useful for handling transient errors, such as network issues. To prevent any retries, set `max_attempts` to `0`.
+   - **delay**: (Float, default: `0`) Sets a delay (in minutes) before triggering the consumer. For delays less than a minute, use fractions (e.g., `0.5` for 30 seconds).
+
+Example consumer file: `app/lib/consumers/something_happened/do_something.liquid`
 
 ```liquid
 ---
@@ -367,7 +398,7 @@ metadata:
 %}
 ```
 
-For this example, the event object will look as:
+For this example, the event object will look like:
 
 ```json
 {
@@ -380,11 +411,12 @@ For this example, the event object will look as:
 }
 ```
 
-Events can be published and consumed by different parties. In the application, you can write a consumer that reacts to events published by the module.
+Events can be published and consumed by different parts of the application. You can write a consumer that reacts to events published by a module or other parts of your system.
 
-### Debugging events
+### Debugging Events
 
-The core module provides a simple UI to help you preview published events, re-trigger them etc. It is available only in staging environment at `/_events`
+The core module provides a simple UI to help you preview published events, re-trigger them, and more. This UI is available only in the staging environment at `/_events`.
+
 
 ## Status handling
 
