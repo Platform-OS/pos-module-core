@@ -172,19 +172,91 @@ Note: Usually the `execute` step is about invoking a GraphQL mutation - if that'
 
 ## Hooks
 
-You can choose to create new hooks either on your modules or inside your `app` folder. You can organize them into folders, for example, `app/views/partials/hooks/hook_permission.liquid` or `modules/your-module/public/lib/hooks/hook_permission.liquid`.
+Hooks allow you and other developers to extend the functionality of your modules or applications without altering the existing code, but by writing a new one. It follows the Open/Close Principle. You achieve it by creating an entry point in a specific point in your application flow, which dynamically executes additional code implemented by matching hooks. 
 
-Call the `modules/core/commands/hook/fire` function with the `hook` name and optionally pass the `params` attribute. Params will be sent to all hook implementations. You can also set the `merge_to_object` boolean to merge the hook results to one object.
+Hooks are defined via [Liquid partials](https://documentation.platformos.com/developer-guide/glossary#partial) that start with `hook_` prefix. We recommend placing them in `lib/hooks` directory. These partials (hooks) are executed via the core module's `modules/core/commands/hooks/fire` function described below.
 
-Create Liquid files like `hook_HOOKNAME.liquid`, and the `fire` function will collect all results. It means that these hook implementations have to have a `return` tag - it can be `nil` but the `return` tag is necessary.
+Organize your hooks into appropriate folders to maintain a clean project structure:
 
-It's possible to define **alter hooks** to modify the existing data before it is handled (for example saved, rendered, etc).
+- **Application Hooks**: Located in `app/lib/hooks/`, e.g., `hook_permission.liquid`
+- **Module Hooks**: Located in `modules/your-module/public/lib/hooks/`, e.g., `hook_permission.liquid`
 
-### Examples
+### Implementing Hooks
 
-#### Returning with arrays
+Implementing a hook means providing the specific logic that should execute when the hook is fired. This is where you define what actually happens when a hook is triggered.
 
-For example, we don't need params in the [Permission Module's](https://github.com/Platform-OS/pos-module-permission) `get_permissions` function:
+1. **Create Hook Implementation**: For the hook declared as `hook_my-hook.liquid`, create an implementation file in an appropriate directory, such as `app/lib/hooks/hook_my-hook.liquid`. In other words, create a Liquid file named after the hook, such as `hook_HOOKNAME.liquid`.
+
+2. **Add Logic to the Hook**: In your hook implementation file, add the logic that should execute. This could include logging, data manipulation, or any other functionality.
+
+3. **Returning from Hooks**: All hooks are invoked via [function](https://documentation.platformos.com/api-reference/liquid/platformos-tags#function), which means that every hook must use [return](https://documentation.platformos.com/api-reference/liquid/platformos-tags#return) tag, even if it is `return null`.
+
+**Note:** To execute the hook, fire it via `modules/core/commands/hook/fire` function and provide your hook name as an argument - `my-hook`; combination of a naming convention (`hook_` prefix) and using the core module's function turns the Liquid partial into a hook. 
+
+### Declaring and Configuring Hooks
+
+To make a hook available for implementation by others, you need to declare and configure it within your project. This setup allows others to extend and customize your code without altering the core functionality.
+
+To make a hook operational and integrate it into your application’s logic, you must explicitly call it using the `modules/core/commands/hook/fire` function. This involves specifying the hook's name (without `hook_` prefix).
+
+For example, if you have declared a hook named `my-hook` (for example by creating a file `app/lib/hooks/hook_my-hook.liquid`), you fire it as follows:
+
+```liquid
+{% liquid
+  function results = 'modules/core/commands/hook/fire', hook: 'my-hook'
+%}
+```
+
+When you fire a hook using the `modules/core/commands/hook/fire` command, the system dynamically searches for all Liquid files that match the pattern `hook_<hook_name>`. If you fire `my-hook`, the system looks for partials whose path ends with `/hook_my-hook`.
+
+Find the [fire.liquid implementation here](https://github.com/Platform-OS/pos-module-core/blob/master/modules/core/public/lib/commands/hook/fire.liquid).
+
+**Parameters and Result Merging**: When firing a hook, you can pass data using the `params` attribute, which will be forwarded to all implementations of the hook. The `merge_to_object` attribute can be used to combine results from different hook implementations into a single object.
+
+### Example for Demonstrating Purpose
+
+To illustrate the dynamic nature of hooks, consider the following example. If you have code like this anywhere in your project, let's say in `app/views/pages/test-hook.liquid`:
+
+```liquid
+{% liquid
+  log "Hello"
+  function results = 'modules/core/commands/hook/fire', hook: 'add-code-dynamically'
+  log "Bye"
+%}
+```
+
+And then you create a file `app/lib/hooks/hook_add-code-dynamically.liquid` with content:
+
+```liquid
+{% log "I'm here" %}
+{% return null %}
+```
+
+When you invoke `https://example.com/test-hook` and check the logs using `pos-cli logs <env>`, you should see:
+
+```
+[2024-07-15 14:48:24.413Z] - info: Hello
+path: /test-hook page: test-hook
+[2024-07-15 14:48:24.434Z] - info: I'm here
+path: /test-hook page: test-hook partial: hooks/hook_add-code-dynamically
+[2024-07-15 14:48:24.434Z] - info: Bye
+```
+
+This demonstrates how the hook system dynamically integrates additional logic at runtime without altering the original code structure.
+
+### Additional Hook Options
+
+- Define [**alter hooks**](https://github.com/Platform-OS/pos-module-core/blob/master/modules/core/public/lib/commands/hook/alter.liquid) to modify data before it is processed further, such as before saving to the database or rendering to the user.
+
+- **Parameters**: Pass additional data to hooks using the `params` attribute. Params will be sent to all hook implementations.
+  
+- **Result Merging**: Use the `merge_to_object` attribute to combine results from various hooks into a single object or collect them in an array.
+
+### Examples of Hook Implementations
+
+#### Returning Arrays with Hooks
+
+Consider the example of the [Permission Module](https://github.com/Platform-OS/pos-module-permission), which doesn't require parameters for its `get_permissions` function:
 
 ```
 {% liquid
@@ -193,7 +265,7 @@ For example, we don't need params in the [Permission Module's](https://github.co
 %}
 ```
 
-and `results` will contain all available permissions in your application.
+This function retrieves all available permissions in your application.
 
 The Permission Module implements its hook with permission-related permissions, so in `modules/permission/public/lib/hooks/hook_permission.liquid` you can find this:
 
@@ -204,7 +276,7 @@ The Permission Module implements its hook with permission-related permissions, s
 %}
 ```
 
-The [User Module](https://github.com/Platform-OS/pos-module-user) implements user related permissions:
+Similarly, the [User Module](https://github.com/Platform-OS/pos-module-user) includes user-related permissions:
 
 ```
 {% liquid
@@ -213,7 +285,7 @@ The [User Module](https://github.com/Platform-OS/pos-module-user) implements use
 %}
 ```
 
-You can create your own permissions if you create `hook_permission.liquid` for example in `app/views/partials/hooks/hook_permission.liquid` or in a custom module.
+You can create your own permissions by creating a `hook_permission.liquid` file, either in `app/views/partials/hooks/` or within a custom module directory:
 
 ```
 {% liquid
@@ -222,27 +294,29 @@ You can create your own permissions if you create `hook_permission.liquid` for e
 %}
 ```
 
-After that, firing the `permission` hook will get the following result:
+When the `permission` hook is fired, it aggregates and returns the following array of permissions from all implementations:
 
 ```
 ["permissions.manage","user.create", "user.delete", "user.update","custom_permission","another_custom_perm"]
 ```
 
-#### Passing params
+#### Passing Parameters to Hooks
 
-For example, in the User Module, we created a hook called `user_create`. It looks like this:
+For example, in the [User Module](https://github.com/Platform-OS/pos-module-user), we created a hook called `user_create`. Here’s how it is set up:
 
-```
+```liquid
 assign params = '{}' | parse_json | hash_merge: created_user: user.user, hook_params: hook_params
 function results = 'modules/core/commands/hook/fire', hook: 'user_create', params: params, merge_to_object: true
 hash_assign user['hook_results'] = results
 ```
 
-It means that if you want to do something when a user is created, you only need to create a file (or files in different folders or modules, it's up to you) called `hook_user_create`, and in this file, you add your functionality.
+This configuration enables you to execute additional actions when a user is created. You need to create a file (or files) named `hook_user_create.liquid` in the appropriate directory (either within your app or a specific module). This file should contain the custom logic you wish to apply.
 
-For example, you can store additional values in your custom profile structure and you will be able to use the created user's ID as a reference. So your `app/lib/hooks/hook_user_create.liquid` file would look like this:
+For example, you can **store additional values in your custom profile structure** and use the created user's ID as a reference.
 
-```
+Here’s how you could structure your `app/lib/hooks/hook_user_create.liquid` to achieve this:
+
+```liquid
 {% parse_json args %}
   {
     "user_id": {{ params.created_user.id | json }},
@@ -258,9 +332,11 @@ For example, you can store additional values in your custom profile structure an
 %}
 ```
 
-Or another real-world example can be to subscribe the user to a newsletter by calling an API of a 3rd party service. In this case, your `hook_user_create.liquid` file would look like this:
+This script processes additional parameters provided during user creation and updates the user's profile in the database.
 
-```
+Another practical use could be to **subscribe the newly created user to a newsletter** via an API of a third-party service. In this scenario, your `hook_user_create.liquid` file would look like this:
+
+```liquid
 {% if params.hook_params.subscribe %}
   {% parse_json data_to_send %}
     {
@@ -285,9 +361,9 @@ Or another real-world example can be to subscribe the user to a newsletter by ca
 {% return nil %}
 ```
 
-Where `app/api_calls/nl_subscribe.liquid` would be something like this:
+And here's how you can define the API call in `app/api_calls/nl_subscribe.liquid`:
 
-```
+```liquid
 ---
 request_type: "POST"
 to: "https://your-api-call.com"
@@ -298,6 +374,8 @@ request_headers: '{
 {{ data | json }}
 
 ```
+
+This configuration sends a POST request to the specified URL with the user’s email as JSON data, subscribing them to the newsletter.
 
 ## Events
 
