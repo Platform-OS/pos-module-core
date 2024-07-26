@@ -301,7 +301,7 @@ request_headers: '{
 
 ## Events
 
-**Events** in platformOS allow you to record that something has happened in the system. Think of them as logs that capture these actions. When an event occurs, other parts of the application might need to react to it. These events are stored using GraphQL mutations and can include various arguments detailing the specifics of what happened. They enable you to add your logic to existing commands and are executed asynchronously in the background.
+**Events**allow you to record that something has happened in the system. Think of them as logs that capture these actions. When an event occurs, other parts of the application might need to react to it. In platformOS, these events are stored using GraphQL mutations and can include various arguments detailing what happened. They enable you to add logic to existing commands and are executed asynchronously in the background.
 
 ### Practical Uses of Events
 
