@@ -10,6 +10,8 @@
     - timestamp (optional)
     - reference_schema (optional)
     - payload (optional)
+    - delay (optional)
+    - max_attempts (optional)
 {% endcomment %}
 {%  liquid
   function object = 'modules/core/commands/statuses/create/build', name: name, timestamp: timestamp, reference_id: reference_id, reference_schema: reference_schema, payload: payload, requester_id: requester_id
@@ -18,7 +20,7 @@
   if object.valid
     function object = 'modules/core/commands/execute', mutation_name: 'modules/core/statuses/create' object: object
     if object.valid
-      function _ = 'modules/core/commands/events/publish', type: 'status_created', object: object
+      function _ = 'modules/core/commands/events/publish', type: 'status_created', object: object, delay: delay, max_attempts: max_attempts
     endif
   else
     log object, 'showme STATUS-INVALID'
