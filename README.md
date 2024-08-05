@@ -1,12 +1,12 @@
 # platformOS Core Module
 
-The goal of this module is to extend the platformOS module system's possibilities.
+This module aims to extend the platformOS module system's possibilities.
 
 With the **hook system**, it's possible to use **SOLID's Open/Closed Principle** so you can modify the business logic in other modules in the application folder without changing the source of existing modules.
 
-There is a **variable storage** that can be used to set variables and get their value in the global scope.
+A **variable storage** can be used to set variables and get their value in the global scope.
 
-You can register your module and theme into the **module registry** with `hook_module_info`. In this info file, you can define your module's name, version, type (module or theme), and dependencies. Module registry will handle **dependency management** and **outdated versions**.
+Register your theme into the **module registry** with `hook_module_info`. In this info file, you can define your theme's name, version, type, and dependencies. Module registry will handle **dependency management** and **outdated versions**.
 
 There are **module helper** functions to check if a module or theme exists in the system so that the other modules can use installed ones without complex dependencies.
 
@@ -47,7 +47,7 @@ The naming conventions that we use are `<resource>/<action>`, for example, `user
 
 Commands are designed to be easily executed as background jobs [heavy commands - external API call, expensive operations computations, reports]. Each command might produce an [Event](#events)
 
-You can use generator provided by the core module to quickly generate our recommend structure with initial code:
+You can use the generator provided by the core module to quickly generate our recommended structure with the initial code:
 
 ```
 pos-cli generate run modules/core/generators/command <command>
@@ -112,7 +112,7 @@ The example build command will generate uuid if not provided in params, will ini
 
 ### Check
 
-This is the place where you validate the input - for example, you ensure all required fields are provided, you check uniqueness, check the format of the input etc. This always returns hash with two keys - `valid` being either `true` or `false`, and if `false` - `errors` with details why validation has failed.
+This is the place where you validate the input - for example, you ensure all required fields are provided, check uniqueness, check the format of the input, etc. This always returns a hash with two keys - `valid` being either `true` or `false`, and if `false` - `errors` with details of why validation has failed.
 
 The core module has already quite a few [built-in validators](#validators).
 
@@ -130,7 +130,7 @@ Example `app/lib/commands/dummy/check.liquid`:
     function c = 'modules/core/validations/length', c: c, object: object, field_name: 'title', maximum: 130
   endif
 
-  function c = 'modules/core/validations/uniqueness', c: c, object: object, field_name: 'uuid'
+  function c = 'modules/core/validations/uniqueness', c: c, object: object, field_name: 'uuid', table: 'dummy'
 
   assign object = object | hash_merge: c
 
