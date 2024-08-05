@@ -1,75 +1,110 @@
 # platformOS Core Module
 
-This module aims to extend the platformOS module system's possibilities.
+The goal of this module is to extend the platformOS module system's possibilities.
 
-With the **hook system**, it's possible to use **SOLID's Open/Closed Principle** so you can modify the business logic in other modules in the application folder without changing the source of existing modules.
+## Features
 
-A **variable storage** can be used to set variables and get their value in the global scope.
+- **Hook system** to apply **SOLID's Open/Closed Principle**, allowing you to modify the business logic of other modules in the application folder without changing the source code of existing modules. Use the **Headscripts Hook** to register and aggregate head scripts (CSS, JS, metadata) from other modules and themes, ensuring a cohesive layout and style across your application.
 
-Register your theme into the **module registry** with `hook_module_info`. In this info file, you can define your theme's name, version, type, and dependencies. Module registry will handle **dependency management** and **outdated versions**.
+- **Command Generators**: Generate commands using the provided generators, streamlining your development process with structured code scaffolding.
 
-There are **module helper** functions to check if a module or theme exists in the system so that the other modules can use installed ones without complex dependencies.
+- **Event System**: Use events to record actions and trigger follow-up actions within your application, facilitating clean code separation and asynchronous processing.
 
-The core module also provides a command and the graphql mutation for **email sending**.
+- **Global Variable Storage** to set and retrieve variables in the global scope, providing a consistent way to manage data across your application.
+
+- **Module Registry & Dependency Management**: Register your module and theme with the **module registry** using `hook_module_info`. This info file allows you to define your module's name, version, type (module or theme), and dependencies. The module registry takes care of **dependency management** and **outdated versions**.
+
+- **Module Helper Functions** to verify if a module or theme exists in the system. This feature allows other modules to use installed ones without complex dependencies.
+
+- **Email sending**: The core module provides both a command and a GraphQL mutation for sending emails, making it easy to add email functionality to your application.
+
+- **Validators**: Built-in validators check required fields, data types, and uniqueness, returning detailed error information if validation fails.
 
 ## Installation
 
-This module is published in Partner Portal Modules Marketplace - https://partners.platformos.com/marketplace/pos_modules/126
+The platformOS Core Module is available on the [Partner Portal Modules Marketplace](https://partners.platformos.com/marketplace/pos_modules/126).
 
-To install it, you have to have [pos-cli](https://github.com/mdyd-dev/pos-cli#overview) installed.
+### Prerequisites
 
-Go into your project directory and use `pos-cli modules install` command, which will create/update `app/pos-modules.json`:
+Before installing the module, ensure that you have [pos-cli](https://github.com/mdyd-dev/pos-cli#overview) installed. This tool is essential for managing and deploying platformOS projects.
 
-`pos-cli modules install core`
+The platformOS Core Module is fully compatible with [platformOS Check](https://github.com/Platform-OS/platformos-lsp#platformos-check----a-linter-for-platformos), a linter and language server that supports any IDE with Language Server Protocol (LSP) integration. For Visual Studio Code users, you can enhance your development experience by installing the [VSCode platformOS Check Extension](https://marketplace.visualstudio.com/items?itemName=platformOS.platformos-check-vscode).
 
-### Pulling the source code
+### Installation Steps
 
-Modules are compatible with [platformOS Check](https://github.com/Platform-OS/platformos-lsp#platformos-check----a-linter-for-platformos), which we highly recommend you to install - it's compatible with any IDE supporting LSP. If you use VSCode, see [VSCode platformOS Check Extension](https://marketplace.visualstudio.com/items?itemName=platformOS.platformos-check-vscode).
+1. **Navigate to your project directory** where you want to install the Core Module.
 
-To be able to leverage LSP features like autocomplete for `function`/`include`/`graphql` tags, you will need to have the source code of the module in your project. We recommended adding `modules/core` into .gitignore (as you should not monkey patch module files, as it will make it hard to update the module to the newest version in the future) and pulling the source code via pos-cli:
+2. **Run the installation command**:
 
-`pos-cli modules pull core`
+```bash
+   pos-cli modules install core
+```
+This command installs the Core Module and updates or creates the `app/pos-modules.json` file in your project directory to track module configurations.
 
-The default behavior of modules is that the files are never deleted. It is assumed that the developers might not have access to all of the files, and thanks to this feature they are still able to overwrite some of the module's files without breaking them. Because the core module is fully public, it is recommended to delete files on deployment. To do it, ensure your app/config.yml includes the core module in the list `modules_that_allow_delete_on_deploy`:
+### Pulling the Source Code
+
+To use advanced features such as autocomplete for `function`, `include`, and `graphql` tags, you'll need to include the module's source code in your project. Follow these steps:
+
+1. **Pull the Source Code**: Use the `pos-cli` command to pull the source code into your local environment:
 
 ```
+pos-cli modules pull core
+```
+
+2. **Update Your .gitignore**: Add `modules/core` to your `.gitignore` file to avoid directly modifying the module files. This precaution helps maintain the integrity of the module and simplifies future updates.
+
+#### Managing Module Files
+
+The default behavior of modules is that **the files are never deleted**. It is assumed that developers might not have access to all of the files, and thanks to this feature, they can still overwrite some of the module's files without breaking them. Since the Core Module is fully public, it is recommended to delete files on deployment. To do this, ensure your `app/config.yml` includes the Core Module in the list `modules_that_allow_delete_on_deploy`:
+
+``` yaml
 modules_that_allow_delete_on_deploy:
 - core
 ```
 
-## Commands / business logic
+## Commands / Business Logic
 
-We recommend using commands to encapsulate business rules. By following our recommendation, you will improve the consistency of your code, so it will be easy to onboard new developers to the project and easier to take over existing projects. The advantage of using this architecture is that it will be easy to re-use the command - you will be able to execute it both in a live web request, as well as a background job.
+We recommend using **commands** to encapsulate business rules. By following our recommendation, you will improve the consistency of your code, so it will be easy to onboard new developers to the project and easier to take over existing projects. The advantage of this architecture is that **commands are reusable**; they can be executed both during live web requests and as background jobs.
 
-We recommend placing your commands in `lib/commands` directory.
+### Commands Directory
 
-The naming conventions that we use are `<resource>/<action>`, for example, `users/create.liquid` or `order/cancel.liquid`.
+We recommend placing your commands in the `lib/commands` directory.
 
-Commands are designed to be easily executed as background jobs [heavy commands - external API call, expensive operations computations, reports]. Each command might produce an [Event](#events)
+### Naming Conventions
 
-You can use the generator provided by the core module to quickly generate our recommended structure with the initial code:
+We use a `<resource>/<action>` format for naming conventions. For instance, use `users/create.liquid` or `order/cancel.liquid` to name your command files.
 
-```
+### Execution
+
+Commands are designed for easy execution as background jobs — ideal for heavy tasks like external API calls, expensive operations computations, or generating reports. Each command might produce an [Event](#events).
+
+### Generating Commands
+
+Use the generator provided by the core module to quickly set up the recommended structure with initial code:
+
+```bash
 pos-cli generate run modules/core/generators/command <command>
 ```
 
-For example
+**Example:**
 
-```
+```bash
 pos-cli generate run modules/core/generators/command dummy/create
 ```
 
-You can also scaffold the whole CRUD at once, for example:
+To scaffold a complete CRUD operation at once, use:
 
-```
-pos-cli generate run modules/core/generators/crud dummy title:string uuid:string c__score:integer --include-views
+```bash
+pos-cli generate run modules/core/generators/crud <dummy> title:string uuid:string c__score:integer --include-views
 ```
 
-The command consists of 3 stages, which we recommend to split into 3 separate files.
+### Command Workflow
+
+Commands in platformOS follow a structured three-stage process. We recommend organizing each stage into separate files:
 
 ![CommandWorkflow](docs/commands.png)
 
-A typical dummy command placed in `app/lib/commands/dummy/create.liquid` would look like this:
+Here is a typical setup for a dummy command located at `app/lib/commands/dummy/create.liquid`:
 
 ```liquid
 {%  liquid
@@ -84,11 +119,15 @@ A typical dummy command placed in `app/lib/commands/dummy/create.liquid` would l
 %}
 ```
 
-### Build
+### Build Stage
 
-This is the place where you build input for the command. The typical use case is to invoke it with `context.params`, which include input provided by the user via submitting `<form>`, to normalize the input, do necessary type conversions, whitelist properties that the user is allowed to provide to the command, etc.
+In the build stage, you **prepare the command's input**. This step involves processing user input, typically submitted through a form (`context.params`). Here, you normalize the data, perform necessary type conversions before it is stored or used further in your application.
 
-Example `app/lib/commands/dummy/build.liquid`:
+By defining a build command, you can manipulate incoming data, perform validations, ensure that only permissible data is processed, and the data meets your application's requirements. This is especially useful for tasks like cleaning up user input, setting default values, and enforcing data consistency.
+
+The build command is implemented using Liquid templates, which manipulate and format the incoming data into a structured JSON object. This process ensures that your data is well-structured and ready for the next steps.
+
+Here’s how a typical build command might look in `app/lib/commands/dummy/build.liquid`:
 
 ```liquid
 {% parse_json data %}
@@ -108,15 +147,17 @@ Example `app/lib/commands/dummy/build.liquid`:
 %}
 ```
 
-The example build command will generate uuid if not provided in params, will initiate the field c__score (c stands for cache) with 0 and will ensure that the title provided to the command is downcased.
+This example build command sets up initial data, generates a UUID if not provided in params, and initializes the `c__score` (cache score) to zero. It also converts the title to lowercase.
 
-### Check
+### Check Stage
 
-This is the place where you validate the input - for example, you ensure all required fields are provided, check uniqueness, check the format of the input, etc. This always returns a hash with two keys - `valid` being either `true` or `false`, and if `false` - `errors` with details of why validation has failed.
+In the check stage, you **validate the inputs** to ensure they meet the required criteria, such as field presence, uniqueness, and proper formatting.
 
-The core module has already quite a few [built-in validators](#validators).
+The results from this stage are always returned in a hash with two keys: `valid`, which can be either `true` or `false`, and if `false`, an `errors` key that provides details on why the validation failed.
 
-Example `app/lib/commands/dummy/check.liquid`:
+The core module comes equipped with several [built-in validators](#validators) to streamline these validations.
+
+Here’s an example of what a check operation might look like in `app/lib/commands/dummy/check.liquid`:
 
 ```liquid
 {% liquid
@@ -130,7 +171,7 @@ Example `app/lib/commands/dummy/check.liquid`:
     function c = 'modules/core/validations/length', c: c, object: object, field_name: 'title', maximum: 130
   endif
 
-  function c = 'modules/core/validations/uniqueness', c: c, object: object, field_name: 'uuid', table: 'dummy'
+  function c = 'modules/core/validations/uniqueness', c: c, object: object, field_name: 'uuid'
 
   assign object = object | hash_merge: c
 
@@ -139,11 +180,13 @@ Example `app/lib/commands/dummy/check.liquid`:
 
 ```
 
-### Execute
+This script ensures that the title and UUID fields are present and checks the title for minimum and maximum length requirements. It also ensures the uniqueness of the UUID, essential for maintaining data integrity across your application.
 
-  If validation succeeds, proceed with executing the command - usually a single [platformOS GraphQL Mutation](https://documentation.platformos.com/get-started/build-your-first-app/saving-data-to-the-database#save-the-data-in-the-database). Any error raised here should be considered 500 server error. If you allow errors here, it means there is something wrong with the code organisation, as all checks to prevent errors should be done in the `check` step.
+### Execute Stage
 
-Example `app/lib/commands/dummy/execute.liquid`:
+Once the inputs pass validation in the check stage, the process moves to execution, typically involving a single [platformOS GraphQL Mutation](https://documentation.platformos.com/get-started/build-your-first-app/saving-data-to-the-database#save-the-data-in-the-database). Any errors occurring at this stage should be considered as 500 server errors. Allowing errors in this phase suggests issues with code organization, as all necessary validations to prevent these errors should have been completed in the `check` stage.
+
+Here’s an example from `app/lib/commands/dummy/execute.liquid` showing how a command is executed:
 
 ```liquid
 {% liquid
@@ -156,7 +199,11 @@ Example `app/lib/commands/dummy/execute.liquid`:
 %}
 ```
 
-Note: Usually the `execute` step is about invoking a GraphQL mutation - if that's the case for your new command, you can use the generic execute function provided by the core module, which is located at `modules/core/public/lib/commands/execute.liquid`. Example usage to invoke GraphQL mutation defined in `app/graphql/dummy/create.graphql`:
+In this script, the GraphQL mutation `dummy/create` is called with the validated object as its argument. If successful, it updates the object's state to valid and returns it.
+
+**Note**: Execution typically involves invoking a GraphQL mutation. If this aligns with your requirements, you can use a generic execution function from the core module found at [`modules/core/public/lib/commands/execute.liquid`](https://github.com/Platform-OS/pos-module-core/blob/master/modules/core/public/lib/commands/execute.liquid). This function standardizes how mutations are handled, improving code reusability and maintainability.
+
+Here is how you can invoke a GraphQL mutation defined in `app/graphql/dummy/create.graphql` using the core module's execution function:
 
 ```liquid
 {%  liquid
@@ -659,7 +706,7 @@ The core module provides some basic helpers for data validation.
 
 These validators can check if all required fields are provided, check uniqueness, data types (numbers are really numbers and not letters), etc. Validators always return a hash with two keys - valid being either true or false, and if false - errors with details of why the validation has failed.
 
-You can find the core validators at [modules/core/public/lib/validations](https://github.com/Platform-OS/pos-module-core/tree/master/modules/core/public/lib/validations)
+You can find the core validators at [modules/core/public/lib/validations](https://github.com/Platform-OS/pos-module-core/tree/master/modules/core/public/lib/validations).
 
 ## Generators
 
@@ -671,4 +718,4 @@ Core module provides useful generators to quickly create files.
 
 ## Contribution
 
-Please check `.git/CONTRIBUTING.md`
+Please check `.github/CONTRIBUTING.md`
