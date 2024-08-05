@@ -659,7 +659,7 @@ The core module provides some basic helpers for data validation.
 
 These validators can check if all required fields are provided, check uniqueness, data types (numbers are really numbers and not letters), etc. Validators always return a hash with two keys - valid being either true or false, and if false - errors with details of why the validation has failed.
 
-You can find the core validators at `modules/core/public/lib/validations`
+You can find the core validators at [modules/core/public/lib/validations](https://github.com/Platform-OS/pos-module-core/tree/master/modules/core/public/lib/validations)
 
 ## Generators
 
