@@ -12,7 +12,7 @@ The goal of this module is to extend the platformOS module system's possibilitie
 
 - **Global Variable Storage** to set and retrieve variables in the global scope, providing a consistent way to manage data across your application.
 
-- **Module Registry & Dependency Management**: Register your module and theme with the **module registry** using `hook_module_info`. This info file allows you to define your module's name, version, type (module or theme), and dependencies. The module registry takes care of **dependency management** and **outdated versions**.
+- **Module Registry & Dependency Management**: Register your theme with the **module registry** using `hook_module_info`. This info file allows you to define your theme's name, version, type (theme), and dependencies. The module registry handles **dependency management** and **outdated versions**.
 
 - **Module Helper Functions** to verify if a module or theme exists in the system. This feature allows other modules to use installed ones without complex dependencies.
 
