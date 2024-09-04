@@ -5,6 +5,8 @@ en:
     not_url: is not valid url
     blank: cannot be blank
     email: must be a valid email
+    equal: expected %{given} to equal %{expected}
+    equal_not_verbose: does not match
     array:
       not_included: '`%{value}` is not a valid value'
       not_unique: elements must be unique
