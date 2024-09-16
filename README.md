@@ -4,7 +4,7 @@ The goal of this module is to extend the platformOS module system's possibilitie
 
 ## Features
 
-- **Hook system** to apply **SOLID's Open/Closed Principle**, allowing you to modify the business logic of other modules in the application folder without changing the source code of existing modules. Use the **Headscripts Hook** to register and aggregate head scripts (CSS, JS, metadata) from other modules and themes, ensuring a cohesive layout and style across your application.
+- **Hook system** to apply **SOLID's Open/Closed Principle**, allowing you to modify the business logic of other modules in the application folder without changing the source code of existing modules. Use the **Headscripts Hook** to register and aggregate headscripts (CSS, JS, metadata) from other modules and themes, ensuring a cohesive layout and style across your application.
 
 - **Command Generators**: Generate commands using the provided generators, streamlining your development process with structured code scaffolding.
 
@@ -121,9 +121,9 @@ Here is a typical setup for a dummy command located at `app/lib/commands/dummy/c
 
 ### Build Stage
 
-In the build stage, you **prepare the command's input**. This step involves processing user input, typically submitted through a form (`context.params`). Here, you normalize the data, perform necessary type conversions before it is stored or used further in your application.
+In the build stage, you **prepare the command's input**. This step involves processing user input, typically submitted through a form (`context.params`). Here, you normalize the data, and perform necessary type conversions before it is stored or used further in your application.
 
-By defining a build command, you can manipulate incoming data, perform validations, ensure that only permissible data is processed, and the data meets your application's requirements. This is especially useful for tasks like cleaning up user input, setting default values, and enforcing data consistency.
+By defining a build command, you can manipulate incoming data, perform validations, and ensure that only permissible data is processed, and the data meets your application's requirements. This is especially useful for tasks like cleaning up user input, setting default values, and enforcing data consistency.
 
 The build command is implemented using Liquid templates, which manipulate and format the incoming data into a structured JSON object. This process ensures that your data is well-structured and ready for the next steps.
 
@@ -238,7 +238,7 @@ Implementing a hook means providing the specific logic that should execute when 
 
 3. **Returning from Hooks**: All hooks are invoked via [function](https://documentation.platformos.com/api-reference/liquid/platformos-tags#function), which means that every hook must use [return](https://documentation.platformos.com/api-reference/liquid/platformos-tags#return) tag, even if it is `return null`.
 
-**Note:** To execute the hook, fire it via `modules/core/commands/hook/fire` function and provide your hook name as an argument - `my-hook`; combination of a naming convention (`hook_` prefix) and using the core module's function turns the Liquid partial into a hook. 
+**Note:** To execute the hook, fire it via `modules/core/commands/hook/fire` function and provide your hook name as an argument - `my-hook`; a combination of a naming convention (`hook_` prefix) and using the core module's function turns the Liquid partial into a hook. 
 
 ### Declaring and Configuring Hooks
 
@@ -426,7 +426,7 @@ This configuration sends a POST request to the specified URL with the user’s e
 
 ## Events
 
-**Events**allow you to record that something has happened in the system. Think of them as logs that capture these actions. When an event occurs, other parts of the application might need to react to it. In platformOS, these events are stored using GraphQL mutations and can include various arguments detailing what happened. They enable you to add logic to existing commands and are executed asynchronously in the background.
+**Events** allow you to record that something has happened in the system. Think of them as logs that capture these actions. When an event occurs, other parts of the application might need to react to it. In platformOS, these events are stored using GraphQL mutations and can include various arguments detailing what happened. They enable you to add logic to existing commands and are executed asynchronously in the background.
 
 ### Practical Uses of Events
 
@@ -480,7 +480,7 @@ metadata:
 
 ### Publishing the Event
 
-Once something happened in the application, you can publish the event. Events should be published directly from a page or a command.
+Once something happens in the application, you can publish the event. Events should be published directly from a page or a command.
 
 `app/views/pages/debug.liquid`
 
@@ -675,12 +675,12 @@ You can pass any additional data as part of the `object` and it'll be available 
 <h1>Hello {{ data.user.first_name }}!</h1>
 ```
 
-Note: By default platformOS does not send real emails from staging environment - please ensure to [Configure test email on your instance](https://documentation.platformos.com/developer-guide/partner-portal/instances/configuring-test-email) to be able to send emails from staging environment.
+Note: By default, platformOS does not send real emails from the staging environment - please ensure to [Configure test email on your instance](https://documentation.platformos.com/developer-guide/partner-portal/instances/configuring-test-email) to be able to send emails from staging environment.
 
 ## Headscripts hook
 
 The core module provides a hook for other modules to register their head scripts (CSS, JS, metadata, etc).
-The modules can implement a `hook_headscripts.liquid` file that returns standard HTML, then you can render the aggregated head scripts in your layout using the `headscripts/search` query:
+The modules can implement a `hook_headscripts.liquid` file that returns standard HTML, and then you can render the aggregated head scripts in your layout using the `headscripts/search` query:
 ```
 <!DOCTYPE html>
 <html lang="en">
@@ -704,7 +704,7 @@ function exists = 'modules/core/queries/module/exists', type: 'module'
 
 The core module provides some basic helpers for data validation.
 
-These validators can check if all required fields are provided, check uniqueness, data types (numbers are really numbers and not letters), etc. Validators always return a hash with two keys - valid being either true or false, and if false - errors with details of why the validation has failed.
+These validators can check if all required fields are provided, check uniqueness, data types (like numbers consisting only of digits and not, for example, letters), etc. Validators always return a hash with two keys - valid being either true or false, and if false - errors with details of why the validation has failed.
 
 You can find the core validators at [modules/core/public/lib/validations](https://github.com/Platform-OS/pos-module-core/tree/master/modules/core/public/lib/validations).
 
