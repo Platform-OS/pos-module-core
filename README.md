@@ -17,7 +17,9 @@ The goal of this module is to extend the platformOS module system's possibilitie
 - **Module Helper Functions** to verify if a module or theme exists in the system. This feature allows other modules to use installed ones without complex dependencies.
 
 - **Email sending**: The core module provides both a command and a GraphQL mutation for sending emails, making it easy to add email functionality to your application.
-
+- 
+- **API call sending**: The core module provides both a command and a GraphQL mutation for triggering external HTTP(s) API Calls, making it easy to integrate with any third-party system via API.
+- 
 - **Validators**: Built-in validators check required fields, data types, and uniqueness, returning detailed error information if validation fails.
 
 ## Installation
