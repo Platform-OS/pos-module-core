@@ -219,6 +219,38 @@ Here is how you can invoke a GraphQL mutation defined in `app/graphql/dummy/crea
 %}
 ```
 
+## Queries / accessing data
+
+We recommend using **queries** to encapsulate query logic. By following our recommendation, you will improve the consistency of your code, so it will be easy to onboard new developers to the project and easier to take over existing projects. The advantage of this architecture is that **queries are reusable** and allows you to add/modify additional data transformers, validate the input, set defaults etc.
+
+### Queries Directory
+
+We recommend placing your queries in the `lib/queries` directory.
+
+### Naming Conventions
+
+We use a `<resource>/search.liquid` to query for multiple resources and `resource/find.liquid` if you need to find one resource.
+
+### Execution
+
+Queries are a simple wrapper over GraphQL query. Below is an example of a simple query `app/lib/queries/orders/search.liquid` which invokes `orders/search` GraphQL query with four arguments.
+
+```liquid
+{% raw %}
+{% liquid
+  assign limit = limit | default: 20
+  unless order
+    assign order = '{ id: { order: "DESC" } }' | parse_json
+  endunless
+
+  graphql r  = 'orders/search', limit: limit, order: order, buyer_id: buyer_id, seller_id: seller_id
+
+  return r.orders.results
+%}
+{% endraw %}
+
+```
+
 ## Hooks
 
 Hooks allow you and other developers to extend the functionality of your modules or applications without altering the existing code, but by writing a new one. It follows the Open/Close Principle. You achieve it by creating an entry point in a specific point in your application flow, which dynamically executes additional code implemented by matching hooks. 
