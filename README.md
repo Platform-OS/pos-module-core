@@ -1,6 +1,6 @@
 # platformOS Core Module
 
-The goal of this module is to extend the platformOS module system's possibilities.
+This module aims to extend the platformOS module system's possibilities.
 
 ## Features
 
@@ -8,7 +8,7 @@ The goal of this module is to extend the platformOS module system's possibilitie
 
 - **Command Generators**: Generate commands using the provided generators, streamlining your development process with structured code scaffolding.
 
-- **Event System**: Use events to record actions and trigger follow-up actions within your application, facilitating clean code separation and asynchronous processing.
+- **Event System**: Use events to record and trigger follow-up actions within your application, facilitating clean code separation and asynchronous processing.
 
 - **Global Variable Storage** to set and retrieve variables in the global scope, providing a consistent way to manage data across your application.
 
@@ -16,7 +16,7 @@ The goal of this module is to extend the platformOS module system's possibilitie
 
 - **Module Helper Functions** to verify if a module or theme exists in the system. This feature allows other modules to use installed ones without complex dependencies.
 
-- **Email sending**: The core module provides both a command and a GraphQL mutation for sending emails, making it easy to add email functionality to your application.
+- **Email sending**: The core module provides both a command and a GraphQL mutation for sending emails, making adding email functionality to your application easy.
   
 - **API call sending**: The core module provides both a command and a GraphQL mutation for triggering external HTTP(s) API Calls, making it easy to integrate with any third-party system via API.
   
@@ -82,7 +82,7 @@ Commands are designed for easy execution as background jobs — ideal for heavy 
 
 ### Generating Commands
 
-Use the generator provided by the core module to quickly set up the recommended structure with initial code:
+Use the generator provided by the core module to quickly set up the recommended structure with the initial code:
 
 ```bash
 pos-cli generate run modules/core/generators/command <command>
@@ -123,7 +123,7 @@ Here is a typical setup for a dummy command located at `app/lib/commands/dummy/c
 
 ### Build Stage
 
-In the build stage, you **prepare the command's input**. This step involves processing user input, typically submitted through a form (`context.params`). Here, you normalize the data, and perform necessary type conversions before it is stored or used further in your application.
+In the build stage, you **prepare the command's input**. This step involves processing user input, typically submitted through a form (`context.params`). Here, you normalize the data and perform necessary type conversions before it is stored or used further in your application.
 
 By defining a build command, you can manipulate incoming data, perform validations, and ensure that only permissible data is processed, and the data meets your application's requirements. This is especially useful for tasks like cleaning up user input, setting default values, and enforcing data consistency.
 
@@ -221,7 +221,7 @@ Here is how you can invoke a GraphQL mutation defined in `app/graphql/dummy/crea
 
 ## Queries / accessing data
 
-We recommend using **queries** to encapsulate query logic. By following our recommendation, you will improve the consistency of your code, so it will be easy to onboard new developers to the project and easier to take over existing projects. The advantage of this architecture is that **queries are reusable** and allows you to add/modify additional data transformers, validate the input, set defaults etc.
+We recommend using **queries** to encapsulate query logic. By following our recommendation, you will improve the consistency of your code, so it will be easy to onboard new developers to the project and easier to take over existing projects. The advantage of this architecture is that **queries are reusable** and allow you to add/modify additional data transformers, validate the input, set defaults, etc.
 
 ### Queries Directory
 
@@ -264,7 +264,7 @@ Organize your hooks into appropriate folders to maintain a clean project structu
 
 ### Implementing Hooks
 
-Implementing a hook means providing the specific logic that should execute when the hook is fired. This is where you define what actually happens when a hook is triggered.
+Implementing a hook means providing the specific logic that should execute when the hook is fired. This is where you define what happens when a hook is triggered.
 
 1. **Create Hook Implementation**: For the hook declared as `hook_my-hook.liquid`, create an implementation file in an appropriate directory, such as `app/lib/hooks/hook_my-hook.liquid`. In other words, create a Liquid file named after the hook, such as `hook_HOOKNAME.liquid`.
 
@@ -366,7 +366,7 @@ Similarly, the [User Module](https://github.com/Platform-OS/pos-module-user) inc
 %}
 ```
 
-You can create your own permissions by creating a `hook_permission.liquid` file, either in `app/views/partials/hooks/` or within a custom module directory:
+You can create your permissions by creating a `hook_permission.liquid` file, either in `app/views/partials/hooks/` or within a custom module directory:
 
 ```
 {% liquid
