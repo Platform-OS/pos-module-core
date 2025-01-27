@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. Dates are displayed in UTC.
 
+> 27 January 2025
+
+## [v2.0.0](https://github.com/Platform-OS/pos-module-core/compare/v2.0.0...v1.5.5)
+
+* Publishing event no longer return job_id, it returns event
+
 > 18 December 2024
 
 ## [v1.5.5](https://github.com/Platform-OS/pos-module-core/compare/v1.5.5...v1.5.2)
