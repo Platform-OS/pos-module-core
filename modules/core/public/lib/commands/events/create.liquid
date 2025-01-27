@@ -4,7 +4,8 @@
   if event.valid
     function event = 'modules/core/commands/events/create/execute', object: event
     if event.valid
-      function _r = 'modules/core/commands/events/broadcast', object: event, deprecated_max_attempts: deprecated_max_attempts, deprecated_delay: deprecated_delay
+      assign source_name = 'modules/core/commands/events/create:' | append: type
+      background _job_id = 'modules/core/commands/events/broadcast', object: event, deprecated_max_attempts: deprecated_max_attempts, deprecated_delay: deprecated_delay, source_name: source_name, priority: 'high'
     else
       log event, type: 'ERROR: modules/core/commands/events invalid'
     endif
