@@ -481,7 +481,7 @@ By creating an event when the order is placed, each of these actions can be hand
 Here's how you can record an event in platformOS:
 
 ```liquid
-{% function _ = 'modules/core/commands/events/publish', type: 'order_placed', object: order_object %}
+{% function activity = 'modules/core/commands/events/publish', type: 'order_placed', object: order_object %}
 ```
 
 This function logs an event of the type `order_placed`, which can then trigger other actions within the system. It's important to note that this method does not use the typical `record_create` but rather `activity_create` to log the event as an activity.
@@ -521,7 +521,7 @@ Once something happens in the application, you can publish the event. Events sho
 ```
 {% liquid
   assign object = null | hash_merge: foo_id: "12345"
-  function _ = 'modules/core/commands/events/publish', type: 'something_happened', object: object
+  function activity = 'modules/core/commands/events/publish', type: 'something_happened', object: object
 %}
 ```
 
