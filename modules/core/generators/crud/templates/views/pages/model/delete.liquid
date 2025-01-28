@@ -8,9 +8,9 @@ method: delete
 
   # platformos-check-disable ConvertIncludeToRender
   if object.valid
-    include 'modules/core/helpers/redirect_to', url: '/<%= modelNamePlural %>', notice: 'app.models.shared.deleted'
+    include 'modules/core/helpers/redirect_to', url: '/<%= modelNamePlural %>', notice: 'modules/core/common.deleted'
   else
-    include 'modules/core/helpers/redirect_to', url: '/<%= modelNamePlural %>', error: 'app.models.shared.delete_failed'
+    include 'modules/core/helpers/redirect_to', url: '/<%= modelNamePlural %>', error: 'modules/core/common.delete_failed'
   endif
   # platformos-check-enable ConvertIncludeToRender
 %}
