@@ -5,7 +5,15 @@
   function c = 'modules/core/validations/presence', c: c, object: object, field_name: 'date'
 
   assign name = 'events/' | append: object.type
-  graphql event_check_partial = 'modules/core/events/events_checks', name: name | fetch: "admin_liquid_partials" | fetch: "results" | first
+  graphql event_check_partials = 'modules/core/events/events_checks', name: name | fetch: "admin_liquid_partials" | fetch: "results"
+  for partial in event_check_partials
+    assign is_event_definition = partial.path | matches: '^(modules/[^/]+/events/[^/]++|events/[^/]+)$'
+    if is_event_definition
+      assign event_check_partial = partial
+      break
+    endif
+  endfor
+
   if event_check_partial
     function event_result = event_check_partial.path, event: object
     if event_result.valid != true
