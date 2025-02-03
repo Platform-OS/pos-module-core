@@ -20,10 +20,7 @@
     assign allow_blank = true
   endif
   if allow_blank != true
-    if value == blank
-      assign message = message_blank | default: 'modules/core/validation.length.blank' | t
-      function c = 'modules/core/helpers/register_error', contract: c, field_name: field_name, message: message
-    endif
+    function c = 'modules/core/validations/presence', c: c, object: object, field_name: field_name
   endif
 
   if minimum != null and size < minimum
