@@ -15,4 +15,4 @@ Returns an array of timezone objects in the following format:
   "friendly_name_without_region":"GMT+12"
 }
 {% endcomment %}
-{% return context.globals.time_zones.all | to_json | parse_json %}
+{% return context.globals.time_zones.all | parse_json %}
