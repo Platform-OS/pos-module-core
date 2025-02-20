@@ -1,20 +1,22 @@
 {% liquid
   if url == blank and context.session.return_to != blank
     assign url = context.session.return_to
+    session return_to = null
   endif
 
-  if context.params.return_to
-    assign url = context.params.return_to | url_decode
+  if context.params.return_to != blank or context.params.redirect_to != blank and url == blank
+    assign url = context.params.return_to | default: context.params.redirect_to | url_decode
+    assign not_start_with_slash = url | matches: '^(?!\/)(.+)'
+
+    # for security reasons, we do not allow redirecting to external URLs based on unsafe user input
+    assign wrong_url = url | matches: '^\/\/'
+    if not_start_with_slash or wrong_url
+      assign url = '/'
+    endif
+  else
+    assign default = default | default: '/'
+    assign url = url | default: default
   endif
-
-  assign url = url | default: '/'
-
-  assign not_start_with_slash = url | matches: '^(?!\/)(.+)'
-  assign wrong_url = url | matches: '^\/\/'
-  if not_start_with_slash or wrong_url
-    assign url = '/'
-  endif
-
 
   # platformos-check-disable ConvertIncludeToRender
   include 'modules/core/helpers/flash/publish', notice: notice, error: error, info: info
@@ -38,5 +40,3 @@
 
   break
 %}
-
-

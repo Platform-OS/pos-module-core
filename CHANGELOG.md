@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file. Dates are displayed in UTC.
 
+> 20 February 2025
+
+## [v2.0.6](https://github.com/Platform-OS/pos-module-core/compare/v2.0.6...v2.0.0)
+
 > 27 January 2025
 
 ## [v2.0.0](https://github.com/Platform-OS/pos-module-core/compare/v2.0.0...v1.5.5)
