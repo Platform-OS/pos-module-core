@@ -5,7 +5,7 @@
           @c
 {% endcomment %}
 {% liquid
-assign invalid_chars = "!,@,#,%,<,>,1,2,3,4,5,6,7,8,9,0" | split: ","
+  assign invalid_chars = "!,@,#,$,%,^,&,*,(,),-,_,=,+,[,{,],},|,\\,:,;,<,>,,,.,?,/,`,~ ,''," | split: "," 
 assign invalid_found = false
 
  for char in invalid_chars
