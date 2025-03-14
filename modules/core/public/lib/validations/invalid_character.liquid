@@ -6,17 +6,18 @@
 {% endcomment %}
 {% liquid
   assign invalid_chars = "!,@,#,$,%,^,&,*,(,),-,_,=,+,[,{,],},|,\\,:,;,<,>,,,.,?,/,`,~ ,''," | split: "," 
-assign invalid_found = false
+  assign invalid_found = false
 
- for char in invalid_chars
+  for char in invalid_chars
     if object[field_name] contains char
      assign invalid_found = true
     endif
- endfor
+  endfor
 
   if invalid_found
     assign key = key | default: "modules/core/validation.invalid_character"
     function c = 'modules/core/helpers/register_error', contract: c, field_name: field_name, key: key
   endif
+  
   return c
 %}
