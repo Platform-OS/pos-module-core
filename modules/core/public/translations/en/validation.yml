@@ -1,6 +1,7 @@
 ---
 en:
   validation:
+    invalid_character: is invalid character
     disallowed: is not valid
     not_url: is not valid url
     blank: cannot be blank
