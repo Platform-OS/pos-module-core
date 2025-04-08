@@ -1,0 +1,13 @@
+{% comment %}
+  params: @url
+          @field_name
+          @key[optional]
+{% endcomment %}
+
+{% liquid
+  assign is_url = url | matches: '^https?:\/\/[\S]+'
+  if is_url != true
+    function c = 'modules/core/helpers/register_error', contract: c, field_name: field_name, key: 'modules/core/validation.not_url'
+  endif
+  return c
+%}  
