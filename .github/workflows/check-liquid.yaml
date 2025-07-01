@@ -1,0 +1,36 @@
+name: Run Liquid Check
+on:
+  push:
+    branches:
+      - '*'
+    paths-ignore:
+      - '**/README.md'
+
+jobs:
+  check_liquid:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up logs directory
+        run: mkdir -p logs
+
+      - name: Start PlatformOS LSP
+        run: |
+          docker run -i \
+            -v ${{ github.workspace }}:${{ github.workspace }} \
+            -w ${{ github.workspace }} \
+            -e PLATFORMOS_CHECK_DEBUG=true \
+            -e PLATFORMOS_CHECK_DEBUG_LOG_FILE=${{ github.workspace }}/logs/platformos-lsp.log \
+            platformos/platformos-lsp:latest
+
+      - name: Run platformos-check
+        run: |
+          docker run -i \
+            -v ${{ github.workspace }}:${{ github.workspace }} \
+            -w ${{ github.workspace }} \
+            -e PLATFORMOS_CHECK_DEBUG=true \
+            -e PLATFORMOS_CHECK_DEBUG_LOG_FILE=${{ github.workspace }}/logs/platformos-check.log \
+            platformos/platformos-check:latest
+          platformos-check liquid
