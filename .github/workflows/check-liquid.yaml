@@ -35,4 +35,3 @@ jobs:
             -e PLATFORMOS_CHECK_DEBUG=true \
             -e PLATFORMOS_CHECK_DEBUG_LOG_FILE=${{ github.workspace }}/logs/platformos-check.log \
             platformos/platformos-check:latest
-          platformos-check liquid
