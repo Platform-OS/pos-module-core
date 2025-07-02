@@ -38,7 +38,7 @@ jobs:
             -w ${{ github.workspace }} \
             -e PLATFORMOS_CHECK_DEBUG=true \
             -e PLATFORMOS_CHECK_DEBUG_LOG_FILE=${{ github.workspace }}/logs/platformos-check.log \
-            platformos/platformos-check:latest | tee logs/platformos-check.log
+            platformos/platformos-check:latest -o json | tee >(jq . > logs/platformos-check.json)
 
       - name: Upload logs
         if: ${{ steps.run_check.outcome == 'success' || steps.run_check.outcome == 'failure' }}
@@ -47,10 +47,10 @@ jobs:
           name: platformos_check_logs_${{ github.run_id }}
           path: |
             logs/platformos-lsp.log
-            logs/platformos-check.log
+            logs/platformos-check.json
 
       - name: Summary of platformos-check
         if: ${{ steps.run_check.outcome == 'success' || steps.run_check.outcome == 'failure' }}
         run: |
-          echo "platformos-check summary:" >> $GITHUB_SUMMARY
-          echo "Result: ${{ steps.run_check.outcome }}" >> $GITHUB_SUMMARY
+          echo "### Summary for platformos-check:" >> $GITHUB_STEP_SUMMARY
+          echo "## Result: ${{ steps.run_check.outcome }}" >> $GITHUB_STEP_SUMMARY
