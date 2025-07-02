@@ -10,4 +10,5 @@ on:
 
 jobs:
   run-platformos-check:
-    uses: Platform-OS/gh-workflows/.github/workflows/run_platformos_check_reusable.yml@main
+    uses: Platform-OS/gh-workflows/.github/workflows/reserve-and-deploy-cs.yml@main
+    # uses: Platform-OS/gh-workflows/.github/workflows/run_platformos_check_reusable.yml@main
