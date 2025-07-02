@@ -10,4 +10,4 @@ on:
 
 jobs:
   run-platformos-check:
-    uses: Platform-OS/gh-workflows/.github/workflows/run-platformos-check.yml@1414c715c98987d4ff35b2b7c949c58712a8d97f
+    uses: Platform-OS/gh-workflows/.github/workflows/run_platformos_check_reusable.yml@main
