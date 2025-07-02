@@ -1,8 +1,9 @@
-name: Run Liquid Check
+name: Run platformos-check on Liquid files
 on:
   push:
-    branches:
-      - '*'
+    paths-ignore:
+      - '**/README.md'
+  pull_request:
     paths-ignore:
       - '**/README.md'
 
