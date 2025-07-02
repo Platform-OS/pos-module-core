@@ -1,0 +1,12 @@
+name: Run platformos-check on Liquid files
+on:
+  push:
+    paths-ignore:
+      - '**/README.md'
+  pull_request:
+    paths-ignore:
+      - '**/README.md'
+
+jobs:
+  run-platformos-check:
+  uses: Platform-OS/gh-workflows/.github/workflows/run-platformos-check.yml@main
