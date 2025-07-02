@@ -38,7 +38,7 @@ jobs:
             -w ${{ github.workspace }} \
             -e PLATFORMOS_CHECK_DEBUG=true \
             -e PLATFORMOS_CHECK_DEBUG_LOG_FILE=${{ github.workspace }}/logs/platformos-check.log \
-            platformos/platformos-check:latest -o json | tee >(jq . > logs/platformos-check.json)
+            platformos/platformos-check:latest -o json | jq . | tee logs/platformos-check.json
 
       - name: Upload logs
         if: ${{ steps.run_check.outcome == 'success' || steps.run_check.outcome == 'failure' }}
@@ -52,5 +52,5 @@ jobs:
       - name: Summary of platformos-check
         if: ${{ steps.run_check.outcome == 'success' || steps.run_check.outcome == 'failure' }}
         run: |
-          echo "### Summary for platformos-check:" >> $GITHUB_STEP_SUMMARY
+          echo "# Summary for platformos-check:" >> $GITHUB_STEP_SUMMARY
           echo "## Result: ${{ steps.run_check.outcome }}" >> $GITHUB_STEP_SUMMARY
