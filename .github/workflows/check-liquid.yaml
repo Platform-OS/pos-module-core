@@ -29,6 +29,7 @@ jobs:
             platformos/platformos-lsp:latest
 
       - name: Run platformos-check
+        if: ${{ steps.start-lsp.outcome == 'success' }}
         id: run-check
         run: |
           docker run -i \
@@ -39,6 +40,7 @@ jobs:
             platformos/platformos-check:latest >> "$GITHUB_OUTPUT"
 
       - name: Summary of platformos-check
+        if: ${{ steps.run-check.outcome == 'success' || steps.run-check.outcome == 'failure' }}
         run: |
           echo "platformos-check summary:" >> "$GITHUB_SUMMARY"
           echo "Result: ${{ steps.run-check.outputs.result }}" >> "$GITHUB_SUMMARY"
