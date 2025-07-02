@@ -10,4 +10,4 @@ on:
 
 jobs:
   run-platformos-check:
-    uses: Platform-OS/gh-workflows/.github/workflows/run-platformos-check.yml@main
+    uses: Platform-OS/gh-workflows/.github/workflows/run-platformos-check.yml
