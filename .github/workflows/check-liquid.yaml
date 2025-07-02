@@ -43,5 +43,5 @@ jobs:
       - name: Summary of platformos-check
         if: ${{ steps.run_check.outcome == 'success' || steps.run_check.outcome == 'failure' }}
         run: |
-          echo "platformos-check summary:" >> "$GITHUB_SUMMARY"
-          echo "Result: ${{ steps.run_check.outcome }}" >> "$GITHUB_SUMMARY"
+          echo "platformos-check summary:" >> $GITHUB_SUMMARY
+          echo "Result: ${{ steps.run_check.outcome }}" >> $GITHUB_SUMMARY
