@@ -32,12 +32,14 @@ jobs:
         if: ${{ steps.start-lsp.outcome == 'success' }}
         id: run-check
         run: |
-          docker run -i \
+          pos-check-output=$(docker run -i \
             -v ${{ github.workspace }}:${{ github.workspace }} \
             -w ${{ github.workspace }} \
             -e PLATFORMOS_CHECK_DEBUG=true \
             -e PLATFORMOS_CHECK_DEBUG_LOG_FILE=${{ github.workspace }}/logs/platformos-check.log \
-            platformos/platformos-check:latest >> "$GITHUB_OUTPUT"
+            platformos/platformos-check:latest)
+
+          echo "pos-check-output" >> "$GITHUB_OUTPUT"
 
       - name: Summary of platformos-check
         if: ${{ steps.run-check.outcome == 'success' || steps.run-check.outcome == 'failure' }}
