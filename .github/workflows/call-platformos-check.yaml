@@ -10,4 +10,6 @@ on:
 
 jobs:
   run-platformos-check:
-    uses: Platform-OS/gh-workflows/.github/workflows/run-platformos-check.yml@main
+    uses: Platform-OS/gh-workflows/.github/workflows/run_platformos_check_reusable.yml@main
+    secrets:
+      MPKIT_TOKEN: ${{ secrets.MPKIT_TOKEN }}
