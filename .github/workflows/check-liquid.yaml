@@ -53,5 +53,7 @@ jobs:
       - name: Summary of platformos-check
         if: ${{ steps.run_check.outcome == 'success' || steps.run_check.outcome == 'failure' }}
         run: |
-          echo "# Summary for platformos-check:" >> $GITHUB_STEP_SUMMARY
-          echo "## Result: ${{ steps.run_check.outcome }}" >> $GITHUB_STEP_SUMMARY
+          echo "# Summary :checkered_flag:" >> $GITHUB_STEP_SUMMARY
+          echo "## Result: ${{ steps.run_check.outcome }} ${{ env.result-icon }}" >> $GITHUB_STEP_SUMMARY
+        env:
+          result-icon: ${{ steps.run_check.outcome == 'success' && ':white_check_mark:' || ':x:' }}
