@@ -38,7 +38,16 @@ jobs:
             -w ${{ github.workspace }} \
             -e PLATFORMOS_CHECK_DEBUG=true \
             -e PLATFORMOS_CHECK_DEBUG_LOG_FILE=${{ github.workspace }}/logs/platformos-check.log \
-            platformos/platformos-check:latest
+            platformos/platformos-check:latest | tee logs/platformos-check.log
+
+      - name: Upload logs
+        if: ${{ steps.run_check.outcome == 'success' || steps.run_check.outcome == 'failure' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: platformos_check_logs_${{ github.run_id }}
+          path: |
+            logs/platformos-lsp.log
+            logs/platformos-check.log
 
       - name: Summary of platformos-check
         if: ${{ steps.run_check.outcome == 'success' || steps.run_check.outcome == 'failure' }}
