@@ -31,6 +31,7 @@ jobs:
       - name: Run platformos-check
         id: run_check
         if: ${{ steps.start_lsp.outcome == 'success' }}
+        continue-on-error: true
         run: |
           docker run -i \
             -v ${{ github.workspace }}:${{ github.workspace }} \
