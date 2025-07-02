@@ -19,6 +19,7 @@ jobs:
           chmod -R 777 logs
 
       - name: Start PlatformOS LSP
+        id: start-lsp
         run: |
           docker run -i \
             -v ${{ github.workspace }}:${{ github.workspace }} \
@@ -28,10 +29,16 @@ jobs:
             platformos/platformos-lsp:latest
 
       - name: Run platformos-check
+        id: run-check
         run: |
           docker run -i \
             -v ${{ github.workspace }}:${{ github.workspace }} \
             -w ${{ github.workspace }} \
             -e PLATFORMOS_CHECK_DEBUG=true \
             -e PLATFORMOS_CHECK_DEBUG_LOG_FILE=${{ github.workspace }}/logs/platformos-check.log \
-            platformos/platformos-check:latest
+            platformos/platformos-check:latest >> "$GITHUB_OUTPUT"
+
+      - name: Summary of platformos-check
+        run: |
+          echo "platformos-check summary:" >> "$GITHUB_SUMMARY"
+          echo "Result: ${{ steps.run-check.outputs.result }}" >> "$GITHUB_SUMMARY"
