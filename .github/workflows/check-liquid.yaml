@@ -57,3 +57,9 @@ jobs:
           echo "## Result: ${{ steps.run_check.outcome }} ${{ env.result-icon }}" >> $GITHUB_STEP_SUMMARY
         env:
           result-icon: ${{ steps.run_check.outcome == 'success' && ':white_check_mark:' || ':x:' }}
+
+      - name: Fail job if platformos-check failed
+        if: ${{ steps.run_check.outcome == 'failure' }}
+        run: |
+          echo "platformos-check failed — marking job as failed"
+          exit 1
