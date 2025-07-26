@@ -1,0 +1,34 @@
+{% if context.constants %}
+    {% assign value = context.constants[name] %}
+{% else %}
+  {% graphql r, name: name %}
+    query get_constant($name: String!) {
+      constant(filter: { name: $name }) {
+        name
+        value
+      }
+    }
+  {% endgraphql %}
+  {% assign value = r.constant.value %}
+{% endif %}
+
+{% liquid
+  case type
+  when "boolean"
+    if value == "true"
+      return true
+    else
+      return false
+    endif
+  when "integer"
+    assign value = value | plus: 0
+    return value
+  when "array"
+    assign value = value | split: ','
+    return value
+  when "time"
+    return value | to_time
+  else
+    return value
+  endcase
+%}
