@@ -1,5 +1,5 @@
 {% liquid
-  assign valid_gpg = object[field_name]['key'] | is_valid_gpg
+  assign valid_gpg = object[field_name]['key'] | is_gpg_valid
   unless valid_gpg
     assign message = 'modules/core/validation.invalid_gpg' | t
     function c = 'modules/core/helpers/register_error', contract: c, field_name: field_name, message: message, key: key
