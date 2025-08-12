@@ -48,3 +48,4 @@ en:
       number: must include at least one number
     invalid: invalid
     not_exist: not exist
+    invalid_gpg: must be a valid GPG key
